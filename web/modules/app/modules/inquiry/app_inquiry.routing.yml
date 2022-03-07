@@ -1,0 +1,62 @@
+app.inquiry.collection.csv:
+  path: /a/app/inquiry/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_inquiry\InquiryCollectionController::csv
+  requirements:
+    _role: authenticated
+
+app.inquiry.collection.json:
+  path: /a/app/inquiry
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_inquiry\InquiryCollectionController::collection
+  requirements:
+    _role: authenticated
+
+app.inquiry.create:
+  path: /a/app/inquiry
+  methods:
+    - POST
+  defaults:
+    _controller: \Drupal\app_inquiry\CreateInquiryController::post
+  requirements:
+    _access: 'TRUE'
+
+app.inquiry.filter.delete:
+  path: /a/app/inquiry/filter/delete/{uuid}
+  methods:
+    - POST
+  defaults:
+    _controller: \Drupal\app_inquiry\DeleteInquiryController::delete
+  requirements:
+    _custom_access: \Drupal\app_inquiry\DeleteInquiryController::access
+
+app.inquiry.filter.programs:
+  path: /a/app/inquiry/filter/programs
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_inquiry\FilterProgramCollectionController::get
+  requirements:
+    _role: authenticated
+
+app.inquiry.filters:
+  path: /a/app/inquiry/filter
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_inquiry\InquiryFilterController::collection
+  requirements:
+    _role: authenticated
+
+app.inquiry.get:
+  path: /a/app/inquiry/{uuid}
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_inquiry\GetInquiryController::get
+  requirements:
+    _custom_access: \Drupal\app_inquiry\GetInquiryController::access

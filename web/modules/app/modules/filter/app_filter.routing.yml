@@ -1,0 +1,26 @@
+app.filter.delete:
+  path: /a/app/filter/delete/{id}
+  methods:
+    - DELETE
+  defaults:
+    _controller: \Drupal\app_filter\FilterController::delete
+  requirements:
+    _role: authenticated
+
+app.filter.create:
+  path: /a/app/filter
+  methods:
+    - POST
+  defaults:
+    _controller: \Drupal\app_filter\FilterController::post
+  requirements:
+    _role: authenticated
+
+app.filter.collection:
+  path: /a/app/filter
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_filter\FilterController::collection
+  requirements:
+    _role: authenticated

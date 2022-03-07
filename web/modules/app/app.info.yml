@@ -1,0 +1,8 @@
+name: App Core
+description: Adds Core App functionality
+package: App
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+#'interface translation project': app
+#'interface translation server pattern': modules/app/translations/%language.po

@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function app_organization_theme($existing, $type, $theme, $path)
+{
+    return [
+        'organization_submitted_receipt_email_body' => ['variables' => ['v' => '']],
+        'organization_approved_email_body' => ['variables' => ['v' => '']],
+        'organization_paused_email_body' => ['variables' => ['v' => '']],
+        'organization_add_admin_new_account_email_body' => ['variables' => ['v' => '']],
+        'organization_add_admin_existing_account_email_body' => ['variables' => ['v' => '']],
+    ];
+}

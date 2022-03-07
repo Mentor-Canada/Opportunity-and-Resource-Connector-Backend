@@ -1,0 +1,64 @@
+<?php
+
+if (isset($_SERVER['HTTP_REFERER'])) {
+    $components = parse_url($_SERVER['HTTP_REFERER']);
+    $origin = "{$components['scheme']}://{$components['host']}";
+    if (!empty($components['port'])) {
+        $origin = "$origin:{$components['port']}";
+    }
+
+    if ($_SERVER['SERVER_NAME'] != 'localhost') {
+        ini_set('session.cookie_path', '/; samesite=None');
+    }
+    header("Access-Control-Allow-Origin: {$origin}");
+    header("Access-Control-Allow-Headers: content-type, x-csrf-token, x-xsrf-token, sentry-trace");
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
+    //  header('Access-Control-Expose-Headers: *');
+    header('Access-Control-Allow-Credentials: true');
+}
+
+use Drupal\app\Utils\Security;
+use Drupal\node\Entity\Node;
+
+require_once __DIR__ . "/app.access.php";
+
+/**
+ * Implements hook_entity_insert().
+ */
+function app_entity_insert(Drupal\Core\Entity\EntityInterface $entity)
+{
+    if ($entity instanceof \Drupal\node\NodeInterface) {
+        /* @var $node Node */
+        $node = Node::load($entity->id());
+        $type = $node->getType();
+
+        if ($type == 'organization' || $type == 'programs') {
+            $languages = Drupal::LanguageManager()->getLanguages();
+            $translated = array_keys($node->getTranslationLanguages());
+
+            foreach ($languages as $language) {
+                $id = $language->getId();
+                /* @var $translation Node */
+                if (in_array($id, $translated)) {
+                    continue;
+                }
+                $translation = $node->addTranslation($id);
+                $translation->setTitle($node->getTitle());
+            }
+
+            $node->save();
+        }
+    }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function app_entity_presave(Drupal\Core\Entity\EntityInterface $entity)
+{
+    if ($entity instanceof \Drupal\user\Entity\User) {
+        if ($entity->id()) {
+            Security::validateProfileSave($entity);
+        }
+    }
+}

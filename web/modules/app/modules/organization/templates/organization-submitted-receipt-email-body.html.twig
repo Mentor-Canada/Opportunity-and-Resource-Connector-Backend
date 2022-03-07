@@ -1,0 +1,16 @@
+{# @var v \Drupal\app_organization\Organization\OrganizationSubmittedEmailReceiptViewModel #}
+<div class="css-wrapper">
+  {% if v.langcode == 'fr' %}
+    <p>Bonjour {{ v.firstName }},</p>
+    <p>Merci d’avoir soumis « {{ v.organizationName }} » dans le Connecteur Mentor.</p>
+    <p>La demande est en cours d’examen.</p>
+    <p>Nous ferons un suivi avec vous sous peu. Si vous n'avez pas eu de nos nouvelles dans les 10 jours ouvrables, veuillez contacter <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a></p>
+    <p>Merci de soutenir le mentorat dans votre collectivité.</p>
+  {% else %}
+    <p>Dear {{ v.firstName }},</p>
+    <p>Thank you for submitting the "{{ v.organizationName }}" organization to the Mentor Connector.</p>
+    <p>The organization’s application is under review.</p>
+    <p>We will follow up with you shortly. If you have not heard from us in 10 business days, please contact us at <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a>.</p>
+    <p>Thank you for supporting mentoring in your community.</p>
+  {% endif %}
+</div>

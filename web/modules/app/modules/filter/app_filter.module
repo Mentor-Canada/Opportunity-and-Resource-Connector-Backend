@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function app_filter_schema()
+{
+    return [];
+}
+
+function app_filter_update_8002()
+{
+    $q = "create table if not exists filter (
+    id  int auto_increment primary key,
+    uid int null,
+    title varchar(255) null,
+    type varchar(255) null,
+    data json null,
+    created datetime default CURRENT_TIMESTAMP null
+  );";
+    \Drupal::database()->query($q)->execute();
+}

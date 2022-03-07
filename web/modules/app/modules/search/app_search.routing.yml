@@ -1,0 +1,51 @@
+app.search.results.get:
+  path: /a/app/search/results/list/{uuid}
+  defaults:
+    _controller: \Drupal\app_search\ResultsController::index
+  requirements:
+    _access: "TRUE"
+
+app.search.collection.json:
+  path: /a/app/search
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_search\SearchCollectionController::collection
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.search.collection.csv:
+  path: /a/app/search/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_search\SearchCollectionController::csv
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.search.post:
+  path: /a/app/search
+  methods:
+    - POST
+  defaults:
+    _controller: \Drupal\app_search\SearchController::post
+  requirements:
+    _access: "TRUE"
+
+app.search.patch:
+  path: /a/app/search/{uuid}
+  methods:
+    - PATCH
+  defaults:
+    _controller: \Drupal\app_search\SearchController::patch
+  requirements:
+    _access: "TRUE"
+
+app.search.get:
+  path: /a/app/search/{uuid}
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_search\SearchController::get
+  requirements:
+    _access: "TRUE"

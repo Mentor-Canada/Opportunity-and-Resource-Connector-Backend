@@ -1,0 +1,25 @@
+services:
+  app.import:
+    class: Drupal\app\Commands\ImportCommand
+    tags:
+      - { name: drush.command }
+  app.importZip:
+    class: Drupal\app\Commands\ImportZipCodes
+    tags:
+      - { name: drush.command }
+  app.devsetup:
+    class: Drupal\app\Commands\DevSetupCommand
+    tags:
+      - { name: drush.command }
+  app.relay:
+    class: Drupal\app\Commands\RelayCommand
+    tags:
+      - { name: drush.command }
+  app.ussetup:
+    class: Drupal\app\Commands\USSetupCommand
+    tags:
+      - { name: drush.command }
+  app.updatecommands:
+    class: Drupal\app\Commands\UpdateCommands
+    tags:
+      - { name: drush.command }

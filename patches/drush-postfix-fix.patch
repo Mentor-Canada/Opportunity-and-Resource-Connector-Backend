@@ -1,0 +1,11 @@
+--- a/vendor/drush/drush/drush	2020-10-05 07:50:13.000000000 -0400
++++ b/vendor/drush/drush/drush	2021-02-07 11:21:49.520000000 -0500
+@@ -1,4 +1,8 @@
+ #!/usr/bin/env php
+ <?php
+ 
++if(!getenv('HOME')) {
++  putenv('HOME=/tmp');
++}
++
+ require __DIR__ . '/drush.php';

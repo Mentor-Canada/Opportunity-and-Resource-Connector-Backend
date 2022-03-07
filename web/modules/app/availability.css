@@ -1,0 +1,13 @@
+.availability-widget {
+  display: table;
+  width: 100%;
+}
+
+.availability-widget > div {
+  display: table-cell;
+  padding-right: 10px;
+}
+
+.availability-widget input[type='text'] {
+  width: 100%;
+}

@@ -1,0 +1,19 @@
+{# @var v \Drupal\relay\ConfirmationEmail #}
+<div class="css-wrapper">
+  <h1>{{ 'app-email-first-steps-headline'|t([], {'langcode': v.langcode})}}</h1>
+  <p>{{ 'app-email-first-steps-body'|t({'@firstName': v.inquiry.firstName, '@lastName': v.inquiry.lastName}, {'langcode': v.langcode})}}</p>
+  <table>
+    <tr>
+      <td style="width: 200px;"><b>{{ 'app-email'|t([], {'langcode': v.langcode}) }}</b></td><td>{{ v.inquiry.email }}</td>
+    </tr>
+    <tr>
+      <td style="width: 200px;"><b>{{ 'app-contact-phone'|t([], {'langcode': v.langcode}) }}</b></td>
+      <td>
+        <div>{{ v.inquiry.phone }}</div>
+        {% if(v.phoneLabel is not empty) %}
+        <div><small>{{ 'app-preference'|t([], {'langcode': v.langcode}) }} {{ v.phoneLabel }}</small></div>
+        {% endif %}
+      </td>
+    </tr>
+  </table>
+</div>

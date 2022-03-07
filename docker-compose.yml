@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  web:
+    build: ./docker
+    volumes:
+      - ./docker/000-default.conf:/etc/apache2/sites-enabled/000-default.conf
+      - .:/var/www/html
+    command: /usr/sbin/apachectl -DFOREGROUND
+    working_dir: /var/www/html
+    restart: always
+  db:
+    image: mysql:8.0.28
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+    restart: always

@@ -1,0 +1,13 @@
+app.account.collection:
+  path: /a/app/accounts
+  defaults:
+    _controller: \Drupal\app_account\AccountCollectionController::collection
+  requirements:
+    _role: authenticated
+
+app.account.collection.csv:
+  path: /a/app/accounts/csv
+  defaults:
+    _controller: \Drupal\app_account\AccountCollectionController::csv
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess

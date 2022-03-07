@@ -1,0 +1,73 @@
+app.program.collection.json:
+  path: /a/app/program
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_program\ProgramCollectionController::collection
+  requirements:
+    _role: authenticated
+
+app.program.collection.csv:
+  path: /a/app/program/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_program\ProgramCollectionController::csv
+  requirements:
+    _role: authenticated
+
+app.program:
+  path: /a/app/program/{uuid}
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::getProgram
+  requirements:
+    _access: 'TRUE'
+
+app.program.delete:
+  path: /a/app/program/{uuid}
+  methods:
+    - DELETE
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::deleteProgram
+  requirements:
+    _custom_access: \Drupal\app\Decorators\ProgramDecorator::directorAccessResult
+
+app.program.patch:
+  path: /a/app/program/{uuid}
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::patch
+  methods:
+    - POST
+  requirements:
+    _role: authenticated
+    _custom_access: \Drupal\app_program\ProgramController::groupAdministratorAccess
+
+app.program.post:
+  path: /a/app/program
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::post
+  methods:
+    - POST
+  requirements:
+    _access: 'TRUE'
+
+app.program.settings.post:
+  path: /a/app/program/{uuid}/settings
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::saveSettings
+  methods:
+    - POST
+  requirements:
+    _role: authenticated
+    _custom_access: \Drupal\app_program\ProgramController::groupAdministratorAccess
+
+app.program.sources:
+  path: /a/app/program/sources
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_program\ProgramController::getProgramSources
+  requirements:
+    _access: 'TRUE'

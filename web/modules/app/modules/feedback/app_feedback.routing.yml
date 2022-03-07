@@ -1,0 +1,26 @@
+app.feedback.post:
+  path: /a/app/feedback
+  defaults:
+    _controller: \Drupal\app_feedback\FeedbackController::submit
+  methods:
+    - POST
+  requirements:
+    _access: "TRUE"
+
+app.feedback.collection.csv:
+  path: /a/app/feedback/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_feedback\FeedbackCollectionController::csv
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.feedback.collection.json:
+  path: /a/app/feedback
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_feedback\FeedbackCollectionController::collection
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess

@@ -1,0 +1,90 @@
+app.organization.collection.csv:
+  path: /a/app/organization/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationCollectionController::csv
+  requirements:
+    _role: authenticated
+
+app.organization.collection.json:
+  path: /a/app/organization
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationCollectionController::collection
+  requirements:
+    _access: 'TRUE'
+
+app.organization.get:
+  path: /a/app/organization/{uuid}
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::getOrganization
+  requirements:
+    _access: 'TRUE'
+
+app.organization.get.submitted:
+  path: /a/app/organization/{uuid}/submitted
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::getSubmittedOrganization
+  requirements:
+    _access: 'TRUE'
+
+app.organization.patch:
+  path: /a/app/organization/{uuid}
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::patch
+  methods:
+    - POST
+  requirements:
+    _role: authenticated
+    _custom_access: \Drupal\app_organization\OrganizationController::groupAdministratorAccess
+
+app.organization.patch.integrations:
+  path: /a/app/organization/{uuid}/integrations
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::saveIntegrations
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.organization.post:
+  path: /a/app/organization
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::post
+  methods:
+    - POST
+  requirements:
+    _access: 'TRUE'
+
+app.organization_administrator_delete:
+  path: /a/app/organization/{uuid}/administrator/{mail}
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationAdministratorController::delete
+  methods:
+    - DELETE
+  requirements:
+    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::directorAccessResult
+
+app.organization_administrator_post:
+  path: /a/app/organization/{uuid}/administrator/{mail}
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationAdministratorController::post
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::directorAccessResult
+
+app.organization.delete:
+  path: /a/app/organization/{uuid}
+  methods:
+    - DELETE
+  defaults:
+    _controller: \Drupal\app_organization\OrganizationController::deleteOrganization
+  requirements:
+    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::directorAccessResult

@@ -1,0 +1,6 @@
+app.sitemap:
+  path: /sitemap.xml
+  defaults:
+    _controller: \Drupal\app_sitemap\SitemapController::render
+  requirements:
+    _access: 'TRUE'

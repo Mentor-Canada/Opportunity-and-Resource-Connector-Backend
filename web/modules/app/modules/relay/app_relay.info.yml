@@ -1,0 +1,7 @@
+name: App Relay
+description: Provides Mail Relay
+package: App
+type: module
+core_version_requirement: ^9
+dependencies:
+  - app

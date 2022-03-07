@@ -1,0 +1,26 @@
+app.notify:
+  path: /a/app/notify
+  defaults:
+    _controller: \Drupal\app_notify\CreateNotifyRequestController::post
+  methods:
+    - POST
+  requirements:
+    _access: 'TRUE'
+
+app.notify.collection.csv:
+  path: /a/app/notify/csv
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_notify\NotifyCollectionController::csv
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.notify.collection.json:
+  path: /a/app/notify
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_notify\NotifyCollectionController::collection
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess

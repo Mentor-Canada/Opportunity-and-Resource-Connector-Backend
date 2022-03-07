@@ -1,0 +1,5 @@
+name: App Filter
+description: Filter
+package: App
+type: module
+core_version_requirement: ^9

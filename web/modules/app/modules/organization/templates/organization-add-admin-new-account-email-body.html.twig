@@ -1,0 +1,20 @@
+{# @var v \Drupal\app_organization\Organization\OrganizationAddAdminEmailBodyViewModel #}
+<div class="css-wrapper">
+  {% if v.langcode == 'fr' %}
+    <p>Félicitations, vous êtes maintenant l'administrateur de l’organisation «&nbsp;{{ v.title }}&nbsp;». En tant qu’administrateur, vous pouvez examiner et modifier les paramètres de cette organisation.</p>
+    <p>Comme c’est la première fois que vous utilisez le Connecteur Mentor, on vous demandera de compléter votre inscription.</p>
+    <p>Veuillez cliquer sur le lien ci-dessous pour examiner et modifier les paramètres de l’organisation.</p>
+    <p><a href='{{ v.organizationLink }}'>Terminez votre inscription pour examiner et modifier les paramètres de l’organisation</a></p>
+    <p>Vous pouvez également cliquer sur le lien ci-dessous pour soumettre votre ou vos programmes de mentorat aux fins d’approbation et pour être inscrit publiquement dans le Connecteur Mentor.</p>
+    <p><a href='{{ v.programLink }}'>Ajouter des programmes pour votre organisation</a></p>
+    <p>Si vous avez des questions ou avez besoin d’aide, veuillez communiquer avec <a href='mailto:support@mentoringcanada.ca'>support@mentoringcanada.ca</a></p>
+  {% else %}
+    <p>Congratulations, you are now an Administrator of '{{ v.title }}' organization. As the Administrator you can review and edit this organization's settings.</p>
+    <p>Since this is your first time using Mentor Connector, you will be asked to complete your registration.</p>
+    <p>Please click on the link below to review and edit the organization settings.</p>
+    <p><a href='{{ v.organizationLink }}'>Complete your registration to review and edit organization settings</a></p>
+    <p>You can also click on the link below to submit your mentoring program(s) for approval and to be listed publicly in Mentor Connector.</p>
+    <p><a href='{{ v.programLink }}'>Complete your registration and add programs for your organization</a></p>
+    <p>If you have any questions or need support, please contact <a href='mailto:support@mentoringcanada.ca'>support@mentoringcanada.ca</a></p>
+  {% endif %}
+</div>

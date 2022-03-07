@@ -1,0 +1,6 @@
+app.relay.post:
+  path: /a/relay
+  defaults:
+    _controller: \Drupal\app_relay\RelayController::post
+  requirements:
+    _access: "TRUE"

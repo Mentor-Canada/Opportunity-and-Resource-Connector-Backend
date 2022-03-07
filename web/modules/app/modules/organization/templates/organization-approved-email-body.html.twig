@@ -1,0 +1,20 @@
+{# @var v \Drupal\app_organization\Organization\OrganizationApprovedEmailBodyViewModel #}
+<div class="css-wrapper">
+  {% if v.langcode == 'fr' %}
+    <p>Félicitations!</p>
+    <p>Nous avons examiné votre demande et votre organisation a été approuvée.</p>
+    <p>Veuillez cliquer sur le lien ci-dessous pour consulter et modifier les paramètres de l’organisation.</p>
+    <p><a href='{{ v.organizationLink }}'>Consultez et modifiez les paramètres de l’organisation</a>.</p>
+    <p>Vous pouvez également cliquer sur le lien ci-dessous pour soumettre votre ou vos programmes de mentorat aux fins d’approbation et pour être inscrit publiquement dans le Connecteur Mentor.</p>
+    <p><a href='{{ v.programLink }}'>Ajouter des programmes pour votre organisation</a></p>
+    <p>Si vous avez des questions ou avez besoin de soutien, veuillez communiquer avec <a href='mailto:support@mentoringcanada.ca'>support@mentoringcanada.ca</a></p>
+  {% else %}
+    <p>Congratulations!</p>
+    <p>We have reviewed your submission and your organization has been approved.</p>
+    <p>Please click on the link below to review and edit the organization settings.</p>
+    <p><a href='{{ v.organizationLink }}'>Review and edit organization settings.</a></p>
+    <p>You can also click on the link below to submit your mentoring program(s) for approval and to be listed publicly in the Mentor Connector.</p>
+    <p><a href='{{ v.programLink }}'>Add programs for your organization</a></p>
+    <p>If you have any questions or need support, please contact <a href='mailto:support@mentoringcanada.ca'>support@mentoringcanada.ca.</a></p>
+  {% endif %}
+</div>

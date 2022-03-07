@@ -1,0 +1,12 @@
+{# @var v \Drupal\app_organization\Organization\OrganizationSubmittedEmailReceiptViewModel #}
+<div class="css-wrapper">
+  {% if v.langcode == 'en' %}
+    <p>Thank you for submitting '{{ v.organizationName }}' organization to be listed in the Mentor Connector.</p>
+    <p>We have reviewed your submission and have some additional questions regarding the organization. A MENTOR Canada team member will connect with you shortly to validate the submission and verify the organization's details.</p>
+    <p>Thank you for your interest in the Mentor Connector.</p>
+  {% else %}
+    <p>Merci d’avoir soumis l’organisation « {{ v.organizationName }} » dans le Connecteur Mentor.</p>
+    <p>Nous avons examiné votre soumission et avons quelques questions supplémentaires concernant l'organisation. Un membre de l'équipe MENTOR Canada communiquera avec vous sous peu pour valider la soumission et vérifier les détails de l'organisation.</p>
+    <p>Merci de l'intérêt que vous portez au Connecteur Mentor.</p>
+  {% endif %}
+</div>

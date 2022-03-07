@@ -1,0 +1,5 @@
+availability:
+  version: 1.x
+  css:
+    theme:
+      availability.css: {}

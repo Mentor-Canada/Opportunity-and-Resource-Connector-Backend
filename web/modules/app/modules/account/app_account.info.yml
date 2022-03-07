@@ -1,0 +1,6 @@
+name: Accounts
+package: App
+type: module
+core_version_requirement: ^9
+dependencies:
+  - app

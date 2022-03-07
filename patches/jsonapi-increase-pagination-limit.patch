@@ -1,0 +1,11 @@
+--- a/core/modules/jsonapi/src/Query/OffsetPage.php	2020-10-28 21:44:59.778576234 +0000
++++ b/core/modules/jsonapi/src/Query/OffsetPage.php	2020-10-28 21:47:05.551468236 +0000
+@@ -49,7 +49,7 @@
+    *
+    * @var int
+    */
+-  const SIZE_MAX = 50;
++  const SIZE_MAX = 5000;
+
+   /**
+    * The offset for the query.

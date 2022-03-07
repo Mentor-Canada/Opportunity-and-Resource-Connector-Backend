@@ -1,0 +1,201 @@
+app.affiliates.collection:
+  path: /a/app/affiliates
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateCollectionController::collection
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.add:
+  path: /a/app/affiliates/{uuid}/zip/{zip}
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateController::addZip
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.add_multiple:
+  path: /a/app/affiliates/{uuid}/zip
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateController::addZips
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.available:
+  path: /a/app/affiliates/zip
+  defaults:
+    _controller: \Drupal\app\Affiliates\Zip\ZipController::index
+  methods:
+    - GET
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.remove:
+  path: /a/app/affiliates/{uuid}/zip/{zip}
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateController::removeZip
+  methods:
+    - DELETE
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.remove_multiple:
+  path: /a/app/affiliates/{uuid}/zip
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateController::removeZips
+  methods:
+    - DELETE
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.affiliates.zip.selected:
+  path: /a/app/affiliates/{uuid}/zip
+  defaults:
+    _controller: \Drupal\app\Affiliates\AffiliateController::zipIndex
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.approval_delete:
+  path: /a/app/approval/{uuid}
+  defaults:
+    _controller: \Drupal\app\Controller\ApprovalController::delete
+  methods:
+    - DELETE
+  requirements:
+    _role: authenticated
+
+app.approval_patch:
+  path: /a/app/approval/{id}
+  defaults:
+    _controller: \Drupal\app\Controller\ApprovalController::patch
+  methods:
+    - PATCH
+  requirements:
+    _role: authenticated
+
+app.approval_post:
+  path: /a/app/approval
+  defaults:
+    _controller: \Drupal\app\Controller\ApprovalController::post
+  methods:
+    - POST
+  requirements:
+    _role: authenticated
+
+app.complete_registration:
+  path: /a/complete-registration
+  defaults:
+    _controller: \Drupal\app\Controller\CompleteRegistrationController::update
+  requirements:
+    _access: 'TRUE'
+
+app.complete_registration_get_data:
+  path: /a/complete-registration/{email}
+  defaults:
+    _controller: \Drupal\app\Controller\CompleteRegistrationController::getData
+  requirements:
+    _access: 'TRUE'
+
+app.organization_me_get:
+  path: /a/app/organization/{uuid}/me
+  defaults:
+    _controller: \Drupal\app\Utils\Utils::me
+  methods:
+    - GET
+  requirements:
+    _role: authenticated
+    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::validEntityAccessResult
+
+app.partner:
+  path: /a/partners
+  defaults:
+    _controller: \Drupal\app\Controller\PartnerController::index
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.program_administrator_delete:
+  path: /a/app/program/{uuid}/administrator/{mail}
+  defaults:
+    _controller: \Drupal\app\Controller\EntityAdministratorController::delete
+  methods:
+    - DELETE
+  requirements:
+    _custom_access: \Drupal\app\Decorators\ProgramDecorator::directorAccessResult
+
+app.program_administrator_post:
+  path: /a/app/program/{uuid}/administrator/{mail}
+  defaults:
+    _controller: \Drupal\app\Controller\EntityAdministratorController::post
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Decorators\ProgramDecorator::directorAccessResult
+
+app.program_me_get:
+  path: /a/app/program/{uuid}/me
+  defaults:
+    _controller: \Drupal\app\Utils\Utils::me
+  methods:
+    - GET
+  requirements:
+    _role: authenticated
+    _custom_access: \Drupal\app\Decorators\ProgramDecorator::validEntityAccessResult
+
+app.regions_add:
+  path: /a/app/regions
+  defaults:
+    _controller: \Drupal\app\Controller\RegionController::add
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.regions_delete:
+  path: /a/app/regions/{id}
+  defaults:
+    _controller: \Drupal\app\Controller\RegionController::delete
+  methods:
+    - DELETE
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.regions_update:
+  path: /a/app/regions/{id}
+  defaults:
+    _controller: \Drupal\app\Controller\RegionController::update
+  methods:
+    - PATCH
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.settings_languages_post:
+  path: /a/app/settings/languages
+  defaults:
+    _controller: \Drupal\app\Settings\SettingsLanguageController::post
+  methods:
+    - POST
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.user:
+  path: /a/user
+  defaults:
+    _controller: \Drupal\app\Controller\UserController::post
+  requirements:
+    _custom_access: \Drupal\app\Utils\Security::globalAdministratorAccess
+
+app.version:
+  path: /a/app/version
+  defaults:
+    _controller: \Drupal\app\Controller\VersionController::get
+  requirements:
+    _access: 'TRUE'
+
+app.bootstrap:
+  path: /a/app/bootstrap
+  defaults:
+    _controller: \Drupal\app\Controller\BootstrapController::get
+  requirements:
+    _access: 'TRUE'
