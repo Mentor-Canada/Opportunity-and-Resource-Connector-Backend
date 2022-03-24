@@ -45,3 +45,5 @@ config/sync/language
 /tools
 .php-cs-fixer.cache
 .editorconfig
+assets/
+language/
