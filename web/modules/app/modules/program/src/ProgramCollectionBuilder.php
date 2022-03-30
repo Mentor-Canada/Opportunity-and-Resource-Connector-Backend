@@ -243,7 +243,7 @@ class ProgramCollectionBuilder extends CollectionBuilderBase
     {
         $this->q->leftJoin("node__field_organization_entity", "organizationEntity", "node.nid = organizationEntity.entity_id");
         $this->q->leftJoin("organizations", "flatOrganizations", "organizationEntity.field_organization_entity_target_id = flatOrganizations.entity_id");
-        $this->q->addExpression("json_unquote(json_extract(flatOrganizations.title, '$.en'))", 'organization_title');
+        $this->q->addExpression( "json_unquote(json_extract(flatOrganizations.title, '$.en')) COLLATE utf8mb4_unicode_ci", 'organization_title');
     }
 
     private function addOrganizationUUID()
