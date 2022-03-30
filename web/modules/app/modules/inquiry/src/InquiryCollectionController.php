@@ -48,6 +48,9 @@ class InquiryCollectionController extends CollectionControllerBase implements Co
                 }
                 $builder->filter(ApplicationFields::program, $entityIds);
                 continue;
+            } elseif ($key == ApplicationFields::organization) {
+                $builder->organization($value);
+                continue;
             }
             $builder->filter($key, $value);
         }
@@ -72,6 +75,7 @@ class InquiryCollectionController extends CollectionControllerBase implements Co
       ->header('app-partner-id')->text(ApplicationFields::partnerId)
       ->header('app-partner-title')->text(ApplicationFields::partnerTitle)
       ->header('app-program')->text(ApplicationFields::programTitle)
+      ->header('app-organization')->text(ApplicationFields::organizationTitle)
       ->header('app-first-name')->text(ApplicationFields::first_name)
       ->header('app-last-name')->text(ApplicationFields::last_name)
       ->header('app-role')->text(ApplicationFields::role, true)

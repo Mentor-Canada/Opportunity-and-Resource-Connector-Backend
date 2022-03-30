@@ -12,6 +12,8 @@ class ApplicationFields
     public const last_name = "lastName";
     public const phone = "phone";
     public const program = "programs.entity_id";
+    public const organization = "inquiries.organization_id";
+    public const organizationTitle = "organization_title";
     public const programFilter = "programFilter";
     public const role = "role";
     //  const search = "field_search";

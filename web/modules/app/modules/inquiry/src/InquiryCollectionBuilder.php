@@ -38,6 +38,13 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
         $this->q->addField("programNode", "uuid", 'program_uuid');
         $this->q->addExpression("JSON_UNQUOTE(JSON_EXTRACT(programs.title, '$.en')) COLLATE utf8mb4_unicode_ci", ApplicationFields::programTitle);
 
+        // organization
+        $this->q->leftJoin("node__field_organization_entity", "organizationEntity", "programNode.nid = organizationEntity.entity_id");
+        $this->q->leftJoin("organizations", "flatOrganizations", "organizationEntity.field_organization_entity_target_id = flatOrganizations.entity_id");
+        $this->q->leftJoin("node", "organizationNode", "organizationNode.nid = organizationEntity.field_organization_entity_target_id");
+        $this->q->addField("organizationNode", "uuid", "organization_uuid");
+        $this->q->addExpression( "json_unquote(json_extract(flatOrganizations.title, '$.en')) COLLATE utf8mb4_unicode_ci", 'organization_title');
+
         // searches
         $this->q->leftJoin("searches", "searches", "inquiries.searchId = searches.id");
         $this->q->addField("searches", "zip", SearchFields::zip);
@@ -64,6 +71,23 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
     {
         if (!empty($end)) {
             $this->q->condition('inquiries.created', $end + 24 * 60 * 60, '<=');
+        }
+        return $this;
+    }
+
+
+    function organization($value)
+    {
+        if (!empty($value)) {
+            $value = json_decode($value);
+            $select = \Drupal::database()->select("node__field_organization_entity", "org");
+            $select->addField("org", "entity_id");
+            $select->leftJoin("node", "node", "node.nid = org.field_organization_entity_target_id");
+            $select->condition("node.uuid", $value);
+            $ids = $select->execute()->fetchAll();
+            $ids = array_column($ids, "entity_id");
+            $ids = !count($ids) ? [0] : $ids;
+            $this->q->condition("inquiries.programId", $ids, "IN");
         }
         return $this;
     }
