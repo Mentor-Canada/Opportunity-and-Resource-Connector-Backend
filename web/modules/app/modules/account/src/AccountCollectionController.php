@@ -19,6 +19,8 @@ class AccountCollectionController extends CollectionControllerBase implements Co
       ->mail($this->adapter->mail)
       ->accountType($this->adapter->accountType)
       ->mentorCity($this->adapter->mentorCity)
+      ->firstName($this->adapter->firstName)
+      ->lastName($this->adapter->lastName)
       ->created($this->adapter->createdStartDate, $this->adapter->createdEndDate)
       ->orderBy($this->adapter->sortField, $this->adapter->sortDirection)
     ;

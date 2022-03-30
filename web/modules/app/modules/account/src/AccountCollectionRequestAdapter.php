@@ -10,6 +10,8 @@ class AccountCollectionRequestAdapter extends RequestAdapterBase
     public ?string $mail = null;
     public ?string $accountType = null;
     public ?string $mentorCity = null;
+    public ?string $firstName = null;
+    public ?string $lastName = null;
 
     public function __construct(Request $request)
     {
@@ -22,6 +24,12 @@ class AccountCollectionRequestAdapter extends RequestAdapterBase
         }
         if (!empty($this->filter['mentorCity'])) {
             $this->mentorCity = $this->filter['mentorCity'];
+        }
+        if (!empty($this->filter['firstName'])) {
+            $this->firstName = $this->filter['firstName'];
+        }
+        if (!empty($this->filter['lastName'])) {
+            $this->lastName = $this->filter['lastName'];
         }
     }
 }

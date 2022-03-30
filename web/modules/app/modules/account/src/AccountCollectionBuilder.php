@@ -99,6 +99,22 @@ GROUP BY field_administrators_target_id
         return $this;
     }
 
+    function firstName($value)
+    {
+        if ($value) {
+            $this->q->condition('firstName.field_first_name_value', "%$value%", "LIKE");
+        }
+        return $this;
+    }
+
+    function lastName($value)
+    {
+        if ($value) {
+            $this->q->condition('lastName.field_last_name_value', "%$value%", "LIKE");
+        }
+        return $this;
+    }
+
     public function range($limit, $offset = 0): AccountCollectionBuilder
     {
         if ($limit) {
