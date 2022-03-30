@@ -97,7 +97,9 @@ class InquiryCollectionController extends CollectionControllerBase implements Co
       })
       ->header('app-how-did-you-hear-about-us')->text(ApplicationFields::how_did_you_hear_about_us, true)
       ->header('app-how-did-you-hear-about-us-other')->text(SearchFields::how_did_you_hear_about_us_other)
-      ->header('app-zip')->text(SearchFields::zip)
+      ->header('app-zip')->callback(SearchFields::zip, function ($value, $row) {
+          return $row->{SearchFields::zip} === 'app-national' ? t('app-national') : $row->{SearchFields::zip};
+      })
       ->header('app-city')->text(SearchFields::city)
       ->header('app-state')->text(SearchFields::state)
       ->header("app-created")->callback('created', fn ($value) => date('Y-m-d H:i:s', $value))
