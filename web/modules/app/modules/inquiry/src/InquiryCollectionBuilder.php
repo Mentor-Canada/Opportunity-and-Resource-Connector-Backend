@@ -35,6 +35,7 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
         $this->q->leftJoin("node", "programNode", "inquiries.programId = programNode.nid");
         $this->q->leftJoin('programs', 'programs', 'programNode.nid = programs.entity_id');
         $this->q->addField("programs", "entity_id");
+        $this->q->addField("programNode", "uuid", 'program_uuid');
         $this->q->addExpression("JSON_UNQUOTE(JSON_EXTRACT(programs.title, '$.en')) COLLATE utf8mb4_unicode_ci", ApplicationFields::programTitle);
 
         // searches

@@ -6,6 +6,7 @@ use rest\program\ProgramBuilder;
 use rest\Request;
 use rest\request_objects\InnerNode;
 use rest\RestTestCase;
+use rest\Session;
 
 class InquiryUtils extends RestTestCase
 {
@@ -41,12 +42,14 @@ class InquiryUtils extends RestTestCase
 
     public static function createInquiry($inquiryParams = null, $language = "en")
     {
-        $program = ProgramBuilder::createProgram();
-        $programId = $program->data->attributes->drupal_internal__nid;
         if (!$inquiryParams) {
             $inquiryParams = InquiryUtils::getParams();
         }
-        $inquiryParams->programId = $programId;
+        if (!$inquiryParams->programId) {
+            $program = ProgramBuilder::createProgram();
+            $programId = $program->data->attributes->drupal_internal__nid;
+            $inquiryParams->programId = $programId;
+        }
         $innerData = (array)new InnerNode("node--application", $inquiryParams);
         $data = [
             "data" => $innerData,
@@ -56,6 +59,18 @@ class InquiryUtils extends RestTestCase
       ->uri("a/app/inquiry")
       ->data($data)
       ->execute();
+        return json_decode($response->getBody());
+    }
+
+    public static function getInquiryCollection()
+    {
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        $response = (new Request())
+            ->uri("a/app/inquiry?sort=-created")
+            ->method('GET')
+            ->session($globalAdminSession)
+            ->execute();
         return json_decode($response->getBody());
     }
 }

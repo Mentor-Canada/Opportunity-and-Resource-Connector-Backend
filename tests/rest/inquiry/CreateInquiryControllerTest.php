@@ -2,6 +2,7 @@
 
 namespace rest\inquiry;
 
+use rest\program\ProgramBuilder;
 use rest\RestTestCase;
 
 class CreateInquiryControllerTest extends RestTestCase
@@ -36,6 +37,20 @@ class CreateInquiryControllerTest extends RestTestCase
 
         $response = InquiryUtils::createInquiry($params, "fr");
         $this->assertPost($response, $params);
+    }
+
+    public function testProgramLinkInAdminInquiryTableIsAccurate()
+    {
+        $params = InquiryUtils::getParams();
+        $program = ProgramBuilder::createProgram()->data;
+        $programUUID = $program->id;
+        $params->programId = $program->attributes->drupal_internal__nid;
+        InquiryUtils::createInquiry($params);
+        $inquiry = current(InquiryUtils::getInquiryCollection()->data);
+        $retrievedProgramUUID = $inquiry->attributes->program_uuid;
+        $this->assertEquals($programUUID, $retrievedProgramUUID,
+            "The program uuid used for program link in inquires table did not match the expected program uuid"
+        );
     }
 
     private function assertPost($response, $params)
