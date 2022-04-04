@@ -29,8 +29,13 @@ class FilterController extends BaseController
         $filter->title = $postData->title;
         $filter->data = $postData->data;
         $filter->uid = Drupal::currentUser()->id();
-        $filter->save();
-        return new JsonResponse(['status' => 'success']);
+        $id = $filter->save();
+        return new JsonResponse([
+            'status' => 'success',
+            'data' => [
+                'id' => $id
+            ]
+        ]);
     }
 
     public function delete($id): JsonResponse

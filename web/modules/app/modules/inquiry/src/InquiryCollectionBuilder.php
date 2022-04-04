@@ -96,7 +96,7 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
     public function filter($key, $value)
     {
         $nullValues = ["app-un-contacted"];
-        $value = json_decode($value);
+        if(!is_array($value)) $value = json_decode($value);
         if (in_array($value, $nullValues)) {
             $this->q->isNull($key);
             return;

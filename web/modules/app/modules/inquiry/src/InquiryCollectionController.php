@@ -63,6 +63,14 @@ class InquiryCollectionController extends CollectionControllerBase implements Co
     private function getIdsFromFilter($filter)
     {
         $adapter = new ProgramRequestAdapter();
+        if (isset($filter['delivery'])) {
+            $delivery = $filter['delivery'];
+            unset($filter['delivery']);
+            $filter[$delivery] = 1;
+        }
+        foreach($filter as $key => $value) {
+            $filter[$key] = json_encode($value);
+        }
         $adapter->filter = $filter;
         $builder = \Drupal\app_program\ProgramUtils::getFilterBuilder($adapter);
         $result = $builder->execute();

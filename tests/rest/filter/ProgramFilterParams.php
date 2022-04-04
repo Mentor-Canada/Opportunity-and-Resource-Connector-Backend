@@ -2,7 +2,7 @@
 
 namespace rest\filter;
 
-class ProgramFilter
+class ProgramFilterParams
 {
     public string $field_standing;
     public string $title;

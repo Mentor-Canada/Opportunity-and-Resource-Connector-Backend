@@ -4,6 +4,7 @@ namespace rest\filter;
 
 use GuzzleHttp\RequestOptions;
 use rest\program\ProgramBuilder;
+use rest\Request;
 use rest\Session;
 
 class FilterUtils
@@ -41,7 +42,7 @@ class FilterUtils
 
     public static function getProgramFilterParams()
     {
-        $filter = new ProgramFilter();
+        $filter = new ProgramFilterParams();
         $filter->field_standing = "app-pending";
         $filter->title = "program name";
         $filter->programDescription = "program description";
@@ -165,5 +166,18 @@ class FilterUtils
             }
         }
         return $matchedFilter;
+    }
+
+    public static function saveFilter(SaveFilterParams $filterParams)
+    {
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        $response = (new Request())
+            ->uri("a/app/filter")
+            ->method('POST')
+            ->session($globalAdminSession)
+            ->data($filterParams)
+            ->execute();
+        return json_decode($response->getBody())->data->id;
     }
 }

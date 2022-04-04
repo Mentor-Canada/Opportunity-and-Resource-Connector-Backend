@@ -14,7 +14,7 @@ class FilterEntity
     public function save()
     {
         $db = Drupal::database();
-        $db->insert('filter')
+        return $db->insert('filter')
       ->fields([
           'uid' => $this->uid,
           'title' => $this->title,
