@@ -87,7 +87,9 @@ class InquiryCollectionController extends CollectionControllerBase implements Co
       ->header('app-first-name')->text(ApplicationFields::first_name)
       ->header('app-last-name')->text(ApplicationFields::last_name)
       ->header('app-role')->text(ApplicationFields::role, true)
-      ->header('app-field-status')->text(ApplicationFields::status, true)
+      ->header('app-field-status')->callback(ApplicationFields::status, function ($value, $row) {
+          return $row->{ApplicationFields::status} == '' ? t('app-un-contacted') : t($row->{ApplicationFields::status});
+      })
       ->header('app-recipient-email')->json(ApplicationFields::recipientEmail)
       ->header('app-relay-email')->callback(ApplicationFields::uuid, function ($value, $row) {
           return "{$value}@{$_ENV['RELAY_HOST']}";

@@ -105,4 +105,45 @@ class InquiryCSVTest extends RestTestCase
         ProgramUtils::addProgramAdministrator($programUUID, $this->secondEmail);
         return $response;
     }
+
+    public function testUnContactedInquiriesShowAsUnContactedInEnglishCSV()
+    {
+        InquiryUtils::createInquiry();
+        $csvContent = InquiryUtils::downloadInquiryCSV();
+        $statusColumnIndex = 7;
+        $csvRows = explode("\r\n", $csvContent);
+        $csvHeaders = explode(',', current($csvRows));
+        $latestInquiry = explode(',', $csvRows[count($csvRows) - 2]);
+        $this->assertEquals(
+            'Status',
+            $csvHeaders[$statusColumnIndex],
+            "The status column index or header translation was incorrect in inquiry english CSV export"
+        );
+        $this->assertEquals(
+            'Uncontacted',
+            $latestInquiry[$statusColumnIndex],
+            "Uncontacted inquiry status was not set to 'Uncontacted' in english inquiry CSV"
+        );
+    }
+
+    public function testUnContactedInquiriesShowAsUnContactedInFrenchCSV()
+    {
+        InquiryUtils::createInquiry();
+        $langCode = (new LangCode())->setToFrench();
+        $csvContent = InquiryUtils::downloadInquiryCSV($langCode);
+        $statusColumnIndex = 7;
+        $csvRows = explode("\r\n", $csvContent);
+        $csvHeaders = explode(',', current($csvRows));
+        $latestInquiry = explode(',', $csvRows[count($csvRows) - 2]);
+        $this->assertEquals(
+            'Statut',
+            $csvHeaders[$statusColumnIndex],
+            "The status column index or header translation was incorrect in inquiry french CSV export"
+        );
+        $this->assertEquals(
+            'Non-contacté',
+            $latestInquiry[$statusColumnIndex],
+            "Uncontacted inquiry status was not set to 'Non-Contacté' in french inquiry CSV"
+        );
+    }
 }
