@@ -5,10 +5,12 @@ namespace rest\program;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use rest\organization\OrganizationControllerTest;
+use rest\Request;
 use rest\request_objects\GuzzleMultipartObject;
 use rest\request_objects\InnerNode;
 use rest\request_objects\RequestContents;
 use rest\request_objects\RequestNode;
+use rest\Session;
 
 class ProgramUtils
 {
@@ -712,5 +714,16 @@ class ProgramUtils
     private function getCountry()
     {
         return $_ENV['COUNTRY'] == null ? 'ca' : $_ENV['COUNTRY'];
+    }
+
+    public static function addProgramAdministrator($programUUID, $adminEmail)
+    {
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        return (new Request())
+            ->uri("/a/app/program/$programUUID/administrator/{$adminEmail}")
+            ->method('POST')
+            ->session($globalAdminSession)
+            ->execute();
     }
 }

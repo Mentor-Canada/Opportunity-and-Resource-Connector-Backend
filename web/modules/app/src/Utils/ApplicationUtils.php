@@ -64,12 +64,14 @@ class ApplicationUtils
 
         $program = Node::load($adapter->programId);
         $administrators = self::getNotificationCollection($program);
+        $recipientEmails = [];
         foreach ($administrators as $row) {
             $account = User::load($row);
             if (!$account) {
                 continue;
             }
             $mail = $account->get('mail')->getValue()[0]['value'];
+            $recipientEmails[] = $mail;
             $hasAppliedTo = t('app-has-applied-to', [], ['langcode' => $adapter->uilang])->__toString();
             $mailManager->mail("app", "application", $mail, "en", [
                 'subject' => "{$adapter->firstName} {$adapter->lastName} {$hasAppliedTo} {$adapter->programTitle}",
@@ -77,6 +79,10 @@ class ApplicationUtils
                 'reply-to' => $replyTo
             ]);
         }
+        \Drupal::database()->query("UPDATE inquiries SET recipient_email = :recipient_email WHERE uuid = :uuid", [
+            ":uuid" => $adapter->uuid,
+            ":recipient_email" => json_encode($recipientEmails)
+        ]);
     }
 
     public static function getNotificationCollection($program): array

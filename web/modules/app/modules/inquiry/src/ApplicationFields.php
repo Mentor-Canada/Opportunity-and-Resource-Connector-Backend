@@ -25,6 +25,7 @@ class ApplicationFields
     public const created = "created";
     public const programTitle = "title";
     public const uuid = "uuid";
+    public const recipientEmail = "recipient_email";
 
     public const partnerId = "partnerId";
     public const partnerTitle = "partnerTitle";

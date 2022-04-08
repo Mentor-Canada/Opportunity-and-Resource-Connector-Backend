@@ -224,10 +224,7 @@ class ProgramControllerTest extends RestTestCase
      */
     public function testSaveProgramAdministrator($uuid)
     {
-        $response  = (new Request())
-      ->uri("a/app/program/$uuid/administrator/authenticated@example.com")
-      ->session($this->globalAdministratorSession())
-      ->execute();
+        $response  = ProgramUtils::addProgramAdministrator($uuid, "authenticated@example.com");
         $statusCode = $response->getStatusCode();
         $this->assertEquals(200, $statusCode, "New admin was not added to the organization");
         return $uuid;

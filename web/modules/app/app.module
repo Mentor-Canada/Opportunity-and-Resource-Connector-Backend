@@ -62,3 +62,8 @@ function app_entity_presave(Drupal\Core\Entity\EntityInterface $entity)
         }
     }
 }
+
+function app_update_81130()
+{
+    Drupal::database()->query("ALTER TABLE inquiries ADD recipient_email JSON");
+}

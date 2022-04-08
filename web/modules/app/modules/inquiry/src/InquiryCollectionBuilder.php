@@ -30,6 +30,7 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
         $this->q->addField("inquiries", ApplicationFields::sms);
         $this->q->addField("inquiries", ApplicationFields::uuid);
         $this->q->addField("inquiries", ApplicationFields::created);
+        $this->q->addField("inquiries", ApplicationFields::recipientEmail);
 
         // program
         $this->q->leftJoin("node", "programNode", "inquiries.programId = programNode.nid");

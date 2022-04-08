@@ -19,7 +19,7 @@ class Session extends TestCase
     public function request($method, $uri, $data = [])
     {
         $data['cookies'] = $this->jar;
-        $client = new Client(['base_uri' => 'http://localhost']);
+        $client = new Client(['base_uri' => 'http://localhost', 'decode_content' => false]);
         $response = $client->request($method, $uri, $data);
         return $response;
     }

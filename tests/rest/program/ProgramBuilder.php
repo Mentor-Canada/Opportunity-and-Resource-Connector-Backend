@@ -13,11 +13,13 @@ use rest\request_objects\RequestContents;
 class ProgramBuilder
 {
     public array $attributes;
+    public array $additionalAttributes;
     public array $relationships = [];
 
     public function __construct()
     {
         $this->attributes = (array)ProgramUtils::getParams();
+        $this->additionalAttributes = (array)ProgramUtils::getAdditionalParams();
     }
 
     public static function createProgram($alternateParams = false, $includeOrganization = false, $frenchOnly = false)
@@ -53,7 +55,7 @@ class ProgramBuilder
         $payload->contents = new RequestContents();
         $payload->contents->nodes->en = new InnerNode('programs', $this->attributes);
         $payload->contents->nodes->en->relationships = $this->relationships;
-        $payload->contents->additional = ProgramUtils::getAdditionalParams();
+        $payload->contents->additional = $this->additionalAttributes;
         $data = $payload->transformToDataArray();
         $response = (new Request())
       ->uri("a/app/program")

@@ -5,6 +5,7 @@ namespace rest\inquiry;
 use rest\program\ProgramBuilder;
 use rest\Request;
 use rest\request_objects\InnerNode;
+use rest\request_objects\LangCode;
 use rest\RestTestCase;
 use rest\Session;
 
@@ -72,5 +73,23 @@ class InquiryUtils extends RestTestCase
             ->session($globalAdminSession)
             ->execute();
         return json_decode($response->getBody());
+    }
+
+    public static function downloadInquiryCSV(LangCode $langCode = null)
+    {
+        if (!$langCode) {
+            $langCode = new LangCode();
+        }
+        $language = $langCode->selectedLanguage;
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        $response = (new Request())
+            ->method("GET")
+            ->uri("{$language}/a/app/inquiry/csv")
+            ->session($globalAdminSession)
+            ->execute();
+        ob_start();
+        echo $response->getBody();
+        return ob_get_clean();
     }
 }
