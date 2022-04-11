@@ -43,7 +43,7 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
         $this->q->leftJoin("organizations", "flatOrganizations", "organizationEntity.field_organization_entity_target_id = flatOrganizations.entity_id");
         $this->q->leftJoin("node", "organizationNode", "organizationNode.nid = organizationEntity.field_organization_entity_target_id");
         $this->q->addField("organizationNode", "uuid", "organization_uuid");
-        $this->q->addExpression( "json_unquote(json_extract(flatOrganizations.title, '$.en')) COLLATE utf8mb4_unicode_ci", 'organization_title');
+        $this->q->addExpression("json_unquote(json_extract(flatOrganizations.title, '$.en')) COLLATE utf8mb4_unicode_ci", 'organization_title');
 
         // searches
         $this->q->leftJoin("searches", "searches", "inquiries.searchId = searches.id");
@@ -76,7 +76,7 @@ class InquiryCollectionBuilder extends CollectionBuilderBase
     }
 
 
-    function organization($value)
+    public function organization($value)
     {
         if (!empty($value)) {
             $value = json_decode($value);

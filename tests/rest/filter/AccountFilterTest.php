@@ -9,7 +9,6 @@ use rest\RestTestCase;
 
 class AccountFilterTest extends RestTestCase
 {
-
     public function testFilterAccountByFirstName()
     {
         $this->createAccountsForFilter();
@@ -22,12 +21,21 @@ class AccountFilterTest extends RestTestCase
         $body = json_decode($response->getBody());
         $firstResult = $body->data[0]->attributes;
         $secondResult = $body->data[1]->attributes;
-        $this->assertEquals(2, count($body->data),
-            'first name account filter returned an unexpected number of results');
-        $this->assertEquals('bruce', $firstResult->firstName,
-            'first name account  filter failed to fetch 1st of 2 expected results correctly');
-        $this->assertEquals('bruce', $secondResult->firstName,
-            'first name account filter failed to fetch 2nd of 2 expected results correctly');
+        $this->assertEquals(
+            2,
+            count($body->data),
+            'first name account filter returned an unexpected number of results'
+        );
+        $this->assertEquals(
+            'bruce',
+            $firstResult->firstName,
+            'first name account  filter failed to fetch 1st of 2 expected results correctly'
+        );
+        $this->assertEquals(
+            'bruce',
+            $secondResult->firstName,
+            'first name account filter failed to fetch 2nd of 2 expected results correctly'
+        );
     }
 
     public function testFilterAccountByLastName()
@@ -42,12 +50,21 @@ class AccountFilterTest extends RestTestCase
         $body = json_decode($response->getBody());
         $firstResult = $body->data[0]->attributes;
         $secondResult = $body->data[1]->attributes;
-        $this->assertEquals(2, count($body->data),
-            'last name account filter returned an unexpected number of results');
-        $this->assertEquals('banner', $firstResult->lastName,
-            'last name account filter failed to fetch 1st of 2 expected results correctly');
-        $this->assertEquals('banner', $secondResult->lastName,
-            'last name account filter failed to fetch 2nd of 2 expected results correctly');
+        $this->assertEquals(
+            2,
+            count($body->data),
+            'last name account filter returned an unexpected number of results'
+        );
+        $this->assertEquals(
+            'banner',
+            $firstResult->lastName,
+            'last name account filter failed to fetch 1st of 2 expected results correctly'
+        );
+        $this->assertEquals(
+            'banner',
+            $secondResult->lastName,
+            'last name account filter failed to fetch 2nd of 2 expected results correctly'
+        );
     }
 
     public function testFilterAccountByFirstAndLastName()
@@ -61,12 +78,21 @@ class AccountFilterTest extends RestTestCase
             ->execute();
         $body = json_decode($response->getBody());
         $result = $body->data[0]->attributes;
-        $this->assertEquals(1, count($body->data),
-            'first and last name account filter returned an unexpected number of results');
-        $this->assertEquals('joe', $result->firstName,
-            'first and last name account filter failed to match first name correctly');
-        $this->assertEquals('banner', $result->lastName,
-            'first and last name account filter failed to match last name correctly');
+        $this->assertEquals(
+            1,
+            count($body->data),
+            'first and last name account filter returned an unexpected number of results'
+        );
+        $this->assertEquals(
+            'joe',
+            $result->firstName,
+            'first and last name account filter failed to match first name correctly'
+        );
+        $this->assertEquals(
+            'banner',
+            $result->lastName,
+            'first and last name account filter failed to match last name correctly'
+        );
     }
 
     private function createAccountsForFilter()

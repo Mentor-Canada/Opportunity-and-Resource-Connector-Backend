@@ -4,7 +4,6 @@ namespace rest\request_objects;
 
 class UserBuilder
 {
-
     public string $firstName;
     public string $lastName;
     public string $email;

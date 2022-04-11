@@ -43,8 +43,11 @@ class CreateInquiryControllerTest extends RestTestCase
         InquiryUtils::createInquiry($params);
         $inquiry = current(InquiryUtils::getInquiryCollection()->data);
         $retrievedOrganizationUUID = $inquiry->attributes->organization_uuid;
-        $this->assertEquals($organizationUUID, $retrievedOrganizationUUID,
-            "The organization uuid associated with an inquiry in admin inquires table was incorrect");
+        $this->assertEquals(
+            $organizationUUID,
+            $retrievedOrganizationUUID,
+            "The organization uuid associated with an inquiry in admin inquires table was incorrect"
+        );
     }
 
     public function testGetInquiryByOrganizationFilter()
@@ -69,12 +72,21 @@ class CreateInquiryControllerTest extends RestTestCase
         $retrievedInquiryUUID = $retrievedInquiry->attributes->uuid;
         $retrievedOrganizationUUID = $retrievedInquiry->attributes->organization_uuid;
 
-        $this->assertEquals(1, count($filterResults),
-            "The number of results retrieved through admin inquiry table organization filter was incorrect");
-        $this->assertEquals($inquiryUUID, $retrievedInquiryUUID,
-            "The inquiry retrieved through inquiry admin table organization filter was incorrect");
-        $this->assertEquals($organizationUUID, $retrievedOrganizationUUID,
-            "The organization retrieved through inquiry admin table organization filter was incorrect");
+        $this->assertEquals(
+            1,
+            count($filterResults),
+            "The number of results retrieved through admin inquiry table organization filter was incorrect"
+        );
+        $this->assertEquals(
+            $inquiryUUID,
+            $retrievedInquiryUUID,
+            "The inquiry retrieved through inquiry admin table organization filter was incorrect"
+        );
+        $this->assertEquals(
+            $organizationUUID,
+            $retrievedOrganizationUUID,
+            "The organization retrieved through inquiry admin table organization filter was incorrect"
+        );
     }
 
     public function testCreateMenteeInquiryInFrench()
@@ -94,7 +106,9 @@ class CreateInquiryControllerTest extends RestTestCase
         InquiryUtils::createInquiry($params);
         $inquiry = current(InquiryUtils::getInquiryCollection()->data);
         $retrievedProgramUUID = $inquiry->attributes->program_uuid;
-        $this->assertEquals($programUUID, $retrievedProgramUUID,
+        $this->assertEquals(
+            $programUUID,
+            $retrievedProgramUUID,
             "The program uuid used for program link in inquires table did not match the expected program uuid"
         );
     }

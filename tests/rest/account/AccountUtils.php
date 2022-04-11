@@ -8,7 +8,6 @@ use rest\Session;
 
 class AccountUtils extends RestTestCase
 {
-
     public static function createAccount($user)
     {
         $globalAdminSession = new Session();
