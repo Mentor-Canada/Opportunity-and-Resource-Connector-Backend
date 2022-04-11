@@ -3,6 +3,9 @@
 namespace rest;
 
 use PHPUnit\Framework\TestCase;
+use rest\signin\SignInUtils;
+use rest\signin\UserBuilder;
+use rest\signin\UserParams;
 
 class RestTestCase extends TestCase
 {
@@ -21,22 +24,22 @@ class RestTestCase extends TestCase
         return $session;
     }
 
-    protected function createAuthenticatedUser()
+    protected function createAuthenticatedUser(UserParams $userParams = null)
     {
+        if (!$userParams) {
+            $userParams = SignInUtils::getUserParams();
+        }
+        $builder = new UserBuilder();
+        $builder->firstName = $userParams->firstName;
+        $builder->lastName = $userParams->lastName;
+        $builder->email = $userParams->email;
+        $builder->password = $userParams->password;
+        $payload = $builder->build();
         (new Request())
-      ->uri("a/user?_format=json")
-      ->data([
-          "field_first_name" => ["value" => "John"],
-          "field_last_name" => ["value" => "Smith"],
-          "field_global_administrator" => ["value" => "0"],
-          "mail" => ["value" => "authenticated@example.com"],
-          "name" => ["value" => "authenticated@example.com"],
-          "pass" => ["value" => "hello123"],
-          "roles" => ["target_id" => "authenticated"],
-          "status" => ["value" => 1],
-      ])
-      ->session($this->globalAdministratorSession())
-      ->expectedResponseCode([422, 201])
-      ->execute();
+            ->uri("a/user?_format=json")
+            ->data($payload)
+            ->session($this->globalAdministratorSession())
+            ->expectedResponseCode([422, 201])
+            ->execute();
     }
 }

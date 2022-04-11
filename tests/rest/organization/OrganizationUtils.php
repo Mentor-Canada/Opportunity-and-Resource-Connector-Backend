@@ -3,6 +3,7 @@
 namespace rest\organization;
 
 use GuzzleHttp\RequestOptions;
+use rest\Request;
 use rest\request_objects\GuzzleMultipartObject;
 use rest\request_objects\InnerNode;
 use rest\request_objects\RequestNode;
@@ -269,5 +270,16 @@ class OrganizationUtils
     private function getCountry()
     {
         return $_ENV['COUNTRY'] == null ? 'ca' : $_ENV['COUNTRY'];
+    }
+
+    public static function addOrganizationAdmin($organizationId, $adminEmail)
+    {
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        (new Request())
+            ->uri("/a/app/organization/$organizationId/administrator/$adminEmail")
+            ->method('POST')
+            ->session($globalAdminSession)
+            ->execute();
     }
 }

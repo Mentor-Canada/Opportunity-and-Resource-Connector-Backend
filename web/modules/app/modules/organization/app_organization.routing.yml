@@ -69,7 +69,8 @@ app.organization_administrator_delete:
   methods:
     - DELETE
   requirements:
-    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::directorAccessResult
+    _role: authenticated
+    _custom_access: \Drupal\app_organization\OrganizationController::groupAdministratorAccess
 
 app.organization_administrator_post:
   path: /a/app/organization/{uuid}/administrator/{mail}
@@ -78,7 +79,8 @@ app.organization_administrator_post:
   methods:
     - POST
   requirements:
-    _custom_access: \Drupal\app\Decorators\OrganizationDecorator::directorAccessResult
+    _role: authenticated
+    _custom_access: \Drupal\app_organization\OrganizationController::groupAdministratorAccess
 
 app.organization.delete:
   path: /a/app/organization/{uuid}
