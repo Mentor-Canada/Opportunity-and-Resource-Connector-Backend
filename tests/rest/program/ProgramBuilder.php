@@ -4,7 +4,7 @@ namespace rest\program;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
-use rest\organization\OrganizationControllerTest;
+use rest\organization\OrganizationBuilder;
 use rest\Request;
 use rest\request_objects\GuzzleMultipartObject;
 use rest\request_objects\InnerNode;
@@ -15,9 +15,11 @@ class ProgramBuilder
     public array $attributes;
     public array $additionalAttributes;
     public array $relationships = [];
+    public string $programOrganizationId;
 
     public function __construct()
     {
+        $this->programOrganizationId = '';
         $this->attributes = (array)ProgramUtils::getParams();
         $this->additionalAttributes = (array)ProgramUtils::getAdditionalParams();
     }
@@ -36,13 +38,14 @@ class ProgramBuilder
 
     public function addOrganization(): ProgramBuilder
     {
-        $newOrganization = new OrganizationControllerTest();
-        $organizationId = $newOrganization->testCreateOrganization();
+        if (!$this->programOrganizationId) {
+            $this->programOrganizationId = (new OrganizationBuilder())->getUuid();
+        }
         $this->relationships = [
             "field_organization_entity" => [
                 "data" => [
                     "type" => "node--organization",
-                    "id" => $organizationId
+                    "id" => $this->programOrganizationId
                 ]
             ]
         ];
@@ -62,6 +65,11 @@ class ProgramBuilder
       ->data($data, true)
       ->execute();
         return $response;
+    }
+
+    public function getUuid()
+    {
+        return json_decode($this->execute()->getBody())->data->id;
     }
 
     public function getBody()

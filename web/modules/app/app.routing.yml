@@ -122,7 +122,8 @@ app.program_administrator_delete:
   methods:
     - DELETE
   requirements:
-    _custom_access: \Drupal\app\Decorators\ProgramDecorator::directorAccessResult
+    _role: authenticated
+    _custom_access: \Drupal\app_program\ProgramController::groupAdministratorAccess
 
 app.program_administrator_post:
   path: /a/app/program/{uuid}/administrator/{mail}
@@ -131,7 +132,8 @@ app.program_administrator_post:
   methods:
     - POST
   requirements:
-    _custom_access: \Drupal\app\Decorators\ProgramDecorator::directorAccessResult
+    _role: authenticated
+    _custom_access: \Drupal\app_program\ProgramController::groupAdministratorAccess
 
 app.program_me_get:
   path: /a/app/program/{uuid}/me
