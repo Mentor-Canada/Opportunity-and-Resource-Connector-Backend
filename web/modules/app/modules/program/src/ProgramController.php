@@ -43,6 +43,8 @@ class ProgramController extends GroupControllerBase
             $content->data->attributes->$key = $locationData;
         }
 
+        \Drupal::moduleHandler()->invokeAll("mentor_connector_program_alter", ['content' => $content]);
+
         return new JsonResponse($content);
     }
 
