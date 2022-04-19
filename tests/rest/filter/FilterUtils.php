@@ -11,25 +11,25 @@ class FilterUtils
 {
     public static function getOrganizationFilterParams()
     {
-        $filter = new OrganizationFilter();
+        $filter = new OrganizationFilterParams();
         $filter->field_standing = "app-allowed";
-        $filter->field_display_title = "test org";
-        $filter->field_legal_name = "test legal name";
-        $filter->field_description = "org description";
-        $filter->field_type = "other";
-        $filter->field_type_other = "other org";
-        $filter->field_tax_status = "app-organization-tax-status-not-for-profit";
-        $filter->field_tax_status_other = "other tax";
-        $filter->field_first_name = "first_name";
-        $filter->field_last_name = "last_name";
-        $filter->field_position = "other";
-        $filter->field_position_other = "other position";
-        $filter->field_phone = "1234567";
-        $filter->field_alt_phone = "7654321";
-        $filter->field_email = "orgEmail@email.com";
-        $filter->field_web_address = "webAdress";
-        $filter->field_has_location = "yes";
-        $filter->field_physical_location = "100 street";
+        $filter->title = "test org";
+        $filter->legal_name = "test legal name";
+        $filter->description = "org description";
+        $filter->type = "other";
+        $filter->other_type = "other org";
+        $filter->tax_status = "app-organization-tax-status-not-for-profit";
+        $filter->other_tax_status = "other tax";
+        $filter->first_name = "first_name";
+        $filter->last_name = "last_name";
+        $filter->position = "other";
+        $filter->other_position = "other position";
+        $filter->phone = "1234567";
+        $filter->alt_phone = "7654321";
+        $filter->email = "orgEmail@email.com";
+        $filter->website = "webAdress";
+        $filter->has_location = "yes";
+        $filter->location = "100 street";
         return [
             RequestOptions::JSON => [
                 "id" => null,
