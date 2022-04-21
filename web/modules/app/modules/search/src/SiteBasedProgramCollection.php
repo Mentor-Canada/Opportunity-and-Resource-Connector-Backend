@@ -4,7 +4,7 @@ namespace Drupal\app_search;
 
 class SiteBasedProgramCollection
 {
-    public function __construct($adapter)
+    public function __construct(SearchParamsInterface $adapter)
     {
         \Drupal::database()->query(
             "
@@ -23,9 +23,9 @@ CREATE TEMPORARY TABLE resultDistances
 HAVING distance < :distance
 ORDER BY entity_id, distance",
             [
-                ":lng" => $adapter->lng,
-                ":lat" => $adapter->lat,
-                ":distance" => $adapter->distance
+                ":lng" => $adapter->lng(),
+                ":lat" => $adapter->lat(),
+                ":distance" => $adapter->distance()
             ]
         );
     }

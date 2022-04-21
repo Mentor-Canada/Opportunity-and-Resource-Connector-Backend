@@ -8,7 +8,7 @@ class CommunityBasedProgramCollection
 {
     private $rows = [];
 
-    public function __construct($adapter)
+    public function __construct(SearchParamsInterface $adapter)
     {
         $q = "
 SELECT programs_locations.* FROM node
@@ -24,7 +24,7 @@ WHERE programs_locations.type = 'communityBased' AND programs.communityBased = 1
          */
         foreach ($rows as $row) {
             $location = json_decode($row->location);
-            $contains = $this->contains($location, $adapter->location);
+            $contains = $this->contains($location, $adapter->location());
             if ($contains) {
                 $this->rows[] = $row;
                 break;
@@ -50,9 +50,9 @@ CREATE TEMPORARY TABLE communityDistances
 HAVING distance < :distance
 ORDER BY entity_id, distance",
             [
-                ":lng" => $adapter->lng,
-                ":lat" => $adapter->lat,
-                ":distance" => $adapter->distance
+                ":lng" => $adapter->lng(),
+                ":lat" => $adapter->lat(),
+                ":distance" => $adapter->distance()
             ]
         );
         $rows = \Drupal::database()->query("SELECT entity_id FROM communityDistances")->fetchAll();

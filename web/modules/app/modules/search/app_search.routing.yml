@@ -1,7 +1,14 @@
 app.search.results.get:
   path: /a/app/search/results/list/{uuid}
   defaults:
-    _controller: \Drupal\app_search\ResultsController::index
+    _controller: \Drupal\app_search\ResultsController::getWithUuid
+  requirements:
+    _access: "TRUE"
+
+app.search.results.location.get:
+  path: /a/app/search/results/{location}
+  defaults:
+    _controller: \Drupal\app_search\ResultsController::getWithLocation
   requirements:
     _access: "TRUE"
 

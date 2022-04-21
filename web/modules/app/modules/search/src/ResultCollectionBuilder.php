@@ -9,13 +9,13 @@ class ResultCollectionBuilder extends CollectionBuilderBase
 {
     public $q;
 
-    private $adapter;
+    private ?SearchParamsInterface $adapter;
     private $view;
     protected $alias = "n";
     private $_priority;
     private ?SortAlgorithmInterface $_sortAlgorithm = null;
 
-    public function __construct($adapter = null, $view = null)
+    public function __construct(?SearchParamsInterface $adapter = null, $view = null)
     {
         $this->adapter = $adapter;
         $this->view = $view;
@@ -119,7 +119,7 @@ class ResultCollectionBuilder extends CollectionBuilderBase
     public function siteBased()
     {
         $this->q->leftJoin("resultDistances", "distances", "distances.entity_id = n.nid");
-        $this->q->addExpression("postal_code = '{$this->adapter->postalCode}' AND responsivenessTier <= 2", "postalCodeMatch");
+        $this->q->addExpression("postal_code = '{$this->adapter->postalCode()}' AND responsivenessTier <= 2", "postalCodeMatch");
         $this->q->addField("distances", "distance");
         $this->q->addField("distances", "url", "googleMapUrl");
         return $this;
@@ -137,7 +137,7 @@ END
     ", "physicalDistance");
         $this->q->addExpression("
 CASE
-  WHEN distances.postal_code = '{$this->adapter->postalCode}' AND responsivenessTier <= 2 THEN 1
+  WHEN distances.postal_code = '{$this->adapter->postalCode()}' AND responsivenessTier <= 2 THEN 1
   ELSE 0
 END
     ", "physicalPostalCodeMatch");

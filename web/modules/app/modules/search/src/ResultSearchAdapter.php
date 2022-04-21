@@ -2,24 +2,23 @@
 
 namespace Drupal\app_search;
 
-class ResultSearchAdapter
+class ResultSearchAdapter implements SearchParamsInterface
 {
-    public $distance;
-    public $age;
-    public $grade;
-    public $focus;
-    public $youth;
-    public $type;
-    public $lat;
-    public $lng;
-    public $location;
-    public $postalCode;
-    public $limit;
-    public $offset;
-
-    public $communityBased;
-    public $siteBased;
-    public $eMentoring;
+    private $distance;
+    private $age;
+    private $grade;
+    private $focus;
+    private $youth;
+    private $type;
+    private $lat;
+    private $lng;
+    private $location;
+    private $postalCode;
+    private $limit;
+    private $offset;
+    private $communityBased;
+    private $siteBased;
+    private $eMentoring;
 
     public function __construct($searchParams, $params)
     {
@@ -52,5 +51,80 @@ class ResultSearchAdapter
             return null;
         }
         return $array;
+    }
+
+    public function distance(): ?string
+    {
+        return $this->distance;
+    }
+
+    public function age(): ?array
+    {
+        return $this->age;
+    }
+
+    public function grade(): ?array
+    {
+        return $this->grade;
+    }
+
+    public function focus(): ?array
+    {
+        return $this->focus;
+    }
+
+    public function youth(): ?array
+    {
+        return $this->youth;
+    }
+
+    public function type(): ?array
+    {
+        return $this->type;
+    }
+
+    public function lat(): ?string
+    {
+        return $this->lat;
+    }
+
+    public function lng(): ?string
+    {
+        return $this->lng;
+    }
+
+    public function location(): ?object
+    {
+        return $this->location;
+    }
+
+    public function postalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function limit(): ?int
+    {
+        return intval($this->limit);
+    }
+
+    public function offset(): ?int
+    {
+        return intval($this->offset);
+    }
+
+    public function communityBased(): ?string
+    {
+        return $this->communityBased;
+    }
+
+    public function siteBased(): ?string
+    {
+        return $this->siteBased;
+    }
+
+    public function eMentoring(): ?string
+    {
+        return $this->eMentoring;
     }
 }
