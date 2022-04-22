@@ -278,7 +278,7 @@ class ProgramCollectionBuilder extends CollectionBuilderBase
 
         $value = json_decode($value);
         $value = "%$value%";
-        $q->condition("location", $value, "LIKE");
+        $q->where('programs_locations.location COLLATE utf8mb4_unicode_ci LIKE :value', [':value' => $value]);
         $result = $q->execute()->fetchCol();
         if (count($result)) {
             $this->q->condition('node.nid', $result, 'IN');
