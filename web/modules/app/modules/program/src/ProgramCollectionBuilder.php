@@ -156,7 +156,11 @@ class ProgramCollectionBuilder extends CollectionBuilderBase
         $q->addField($field, "entity_id");
         $value = json_decode($value);
         $value = "%$value%";
-        $q->condition($field, $value, "LIKE");
+        if ($field === 'trainingDescription') {
+            $q->where("$field COLLATE utf8mb4_unicode_ci LIKE :value", [':value' => $value]);
+        } else {
+            $q->condition($field, $value, "LIKE");
+        }
         $result = $q->execute()->fetchCol();
         if (count($result)) {
             $this->q->condition('node.nid', $result, 'IN');
