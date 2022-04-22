@@ -148,7 +148,11 @@ class OrganizationCollectionBuilder extends CollectionBuilderBase
         $q->addField($field, "entity_id");
         $value = json_decode($value);
         $value = "%$value%";
-        $q->condition($field, $value, "LIKE");
+        if (in_array($field, ['title', 'location', 'description'])) {
+            $q->where("$field COLLATE utf8mb4_unicode_ci LIKE :value", [':value' => $value]);
+        } else {
+            $q->condition($field, $value, "LIKE");
+        }
         $result = $q->execute()->fetchCol();
         if (count($result)) {
             $this->q->condition('node.nid', $result, 'IN');
