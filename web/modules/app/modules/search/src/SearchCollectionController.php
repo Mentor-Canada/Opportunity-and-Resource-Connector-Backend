@@ -37,7 +37,9 @@ class SearchCollectionController extends CollectionControllerBase implements Col
       ->header('app-first-name')->text(SearchFields::first_name)
       ->header('app-last-name')->text(SearchFields::last_name)
       ->header('app-email')->text(SearchFields::email)
-      ->header('app-field-zip')->text(SearchFields::zip)
+      ->header('app-field-zip')->callback(SearchFields::zip, function ($value, $row) {
+          return $row->{SearchFields::zip} === 'app-national' ? t('app-national') : $row->{SearchFields::zip};
+      })
       ->header('app-city')->text(SearchFields::city)
       ->header('app-state')->text(SearchFields::state)
 

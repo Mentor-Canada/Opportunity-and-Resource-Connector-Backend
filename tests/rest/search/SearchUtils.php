@@ -2,6 +2,10 @@
 
 namespace rest\search;
 
+use rest\Request;
+use rest\request_objects\LangCode;
+use rest\Session;
+
 class SearchUtils
 {
     public static function params()
@@ -27,5 +31,23 @@ class SearchUtils
         ];
 
         return $params;
+    }
+
+    public static function downloadSearchCSV(LangCode $langCode = null)
+    {
+        if (!$langCode) {
+            $langCode = new LangCode();
+        }
+        $language = $langCode->selectedLanguage;
+        $globalAdminSession = new Session();
+        $globalAdminSession->signIn();
+        $response = (new Request())
+            ->method("GET")
+            ->uri("{$language}/a/app/search/csv")
+            ->session($globalAdminSession)
+            ->execute();
+        ob_start();
+        echo $response->getBody();
+        return ob_get_clean();
     }
 }

@@ -9,14 +9,8 @@ class SearchControllerTest extends RestTestCase
 {
     public function testPost()
     {
-        $searchData = new SearchOuterDataObject();
-        $searchData->data = new SearchInnerDataObject();
-        $searchData->data->attributes = SearchUtils::params();
-        $data = (array)$searchData;
-        $response = (new Request())
-      ->uri('a/app/search')
-      ->data($data)
-      ->execute();
+        $builder = new SearchBuilder();
+        $response = $builder->execute();
         $body = json_decode($response->getBody());
         $id = $body->data->id;
         $this->assertNotNull($id);
