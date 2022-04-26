@@ -4,6 +4,7 @@ namespace Drupal\app_program;
 
 use Drupal\app\GroupControllerBase;
 use Drupal\app\Utils\GooglePlaceUtils;
+use Drupal\app\Utils\Security;
 use Drupal\app\Utils\Utils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -81,19 +82,23 @@ class ProgramController extends GroupControllerBase
             ':nationWideEMentoring' => intval($data->delivery->nationWideEMentoring),
             ':source' => $data->source,
         ];
+        \Drupal::moduleHandler()->invokeAll("mentor_connector_program_presave", [
+          'data' => $data,
+          'fields' => &$fields
+        ]);
         \Drupal::database()
-      ->update("programs")
-      ->fields($fields)
-      ->condition("entity_id", $this->node->id())
-      ->execute()
-    ;
+          ->update("programs")
+          ->fields($fields)
+          ->condition("entity_id", $this->node->id())
+          ->execute()
+        ;
 
         // save locations
         \Drupal::database()
-      ->delete("programs_locations")
-      ->condition("entity_id", $this->node->id())
-      ->execute()
-    ;
+          ->delete("programs_locations")
+          ->condition("entity_id", $this->node->id())
+          ->execute()
+        ;
         if ($data->delivery->siteBased) {
             $this->insertLocation($this->node->id(), "siteBased", $data->delivery->siteBasedLocations);
         }

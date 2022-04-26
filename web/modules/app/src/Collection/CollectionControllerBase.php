@@ -29,7 +29,7 @@ abstract class CollectionControllerBase extends BaseController
 
         $documentBuilder = new JSONApiDocumentBuilder();
         $documentBuilder->total($this->total)
-      ->data($this->data);
+            ->data($this->data);
 
         if ($this->offset + $this->limit < $this->total) {
             $documentBuilder->next($this->offset + $this->limit);
