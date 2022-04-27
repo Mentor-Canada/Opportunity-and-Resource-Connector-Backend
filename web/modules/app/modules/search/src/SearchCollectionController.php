@@ -34,9 +34,6 @@ class SearchCollectionController extends CollectionControllerBase implements Col
         (new CSVBuilder($this->data, "searches.csv"))
       ->header('app-partner')->text(SearchFields::partnerTitle)
       ->header('app-field-role')->text(SearchFields::role, true)
-      ->header('app-first-name')->text(SearchFields::first_name)
-      ->header('app-last-name')->text(SearchFields::last_name)
-      ->header('app-email')->text(SearchFields::email)
       ->header('app-field-zip')->callback(SearchFields::zip, function ($value, $row) {
           return $row->{SearchFields::zip} === 'app-national' ? t('app-national') : $row->{SearchFields::zip};
       })
