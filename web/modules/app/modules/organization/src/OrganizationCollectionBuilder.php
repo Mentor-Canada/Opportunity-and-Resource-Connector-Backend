@@ -36,7 +36,7 @@ class OrganizationCollectionBuilder extends CollectionBuilderBase
         $this->q->addField('organizations', 'other_position');
         $this->q->addField('organizations', 'mentor_city_enabled');
         $this->q->addField('organizations', 'bbbsc_enabled');
-        $this->q->addExpression("json_unquote(json_extract(organizations.title, '$.en'))", 'title');
+        $this->q->addExpression("json_unquote(json_extract(organizations.title, '$.en')) COLLATE utf8mb4_unicode_ci", 'title');
         $this->q->addField('organizations', 'has_location');
         $this->q->addField('organizations', 'description');
         $this->q->addField('organizations', 'mtg_enabled');

@@ -4,7 +4,9 @@ namespace rest\organization;
 
 use Exception;
 use GuzzleHttp\RequestOptions;
+use rest\account\AccountUtils;
 use rest\Request;
+use rest\request_objects\UserBuilder;
 use rest\RestTestCase;
 use rest\Session;
 
@@ -210,6 +212,41 @@ class OrganizationControllerTest extends RestTestCase
       ->execute();
         $body = json_decode($response->getBody());
         $this->validateOrganizationFields($body, $params);
+    }
+
+    public function testOrganizationCollectionReturnsCaseInsensitiveAlphabeticallySortedListToFrontEndWhenSortByTitleQueryParamIsProvided()
+    {
+        $userBuilder = new UserBuilder();
+        $timeCreated = date_format(date_create(),"D_h_i_s");
+        $userBuilder->firstName = 'John';
+        $userBuilder->lastName = 'Smith';
+        $userBuilder->email = "orgAlphabeticalTest_{$timeCreated}@example.com";
+        $userBuilder->password = 'hello123';
+        AccountUtils::createAccount($userBuilder->build());
+        $associatedUser = new Session();
+        $associatedUser->signIn($userBuilder->email, 'hello123');
+
+        $organizationBuilder = new OrganizationBuilder();
+        $organizationParams = (object)OrganizationUtils::getParams();
+        $organizationParams->contactEmail = $userBuilder->email;
+        $lettersToAppend = ['y', 'b', 'Z', 'A'];
+        foreach($lettersToAppend as $letter) {
+            $organizationParams->title->en = "$letter-org-title";
+            $organizationBuilder->attributes = (array) $organizationParams;
+            $organizationBuilder->getUuid();
+        }
+
+        $response = (new Request())
+            ->uri("a/app/organization?show=&sort=title")
+            ->method('GET')
+            ->session($associatedUser)
+            ->execute();
+        $organizationCollection = json_decode($response->getBody())->data;
+        $message = "The organization collection was not sorted case insensitive by title";
+        $this->assertEquals("A-org-title", $organizationCollection[0]->attributes->title, $message);
+        $this->assertEquals("b-org-title", $organizationCollection[1]->attributes->title, $message);
+        $this->assertEquals("y-org-title", $organizationCollection[2]->attributes->title, $message);
+        $this->assertEquals("Z-org-title", $organizationCollection[3]->attributes->title, $message);
     }
 
     private function validateOrganizationFields($body, $params = null)
