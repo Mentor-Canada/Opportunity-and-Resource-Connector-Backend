@@ -34,8 +34,9 @@ RUN apt-get install php-soap -y
 RUN apt-get install composer -y
 RUN apt-get install php-mailparse -y
 RUN apt-get install php-gd -y
+
 RUN apt-get install php-xdebug -y
-RUN apt-get install sendmail -y
+RUN rm /etc/php/7.4/apache2/conf.d/20-xdebug.ini
 
 RUN a2enmod rewrite
 
