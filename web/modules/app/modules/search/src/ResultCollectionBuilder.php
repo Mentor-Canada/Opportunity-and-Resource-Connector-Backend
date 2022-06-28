@@ -33,6 +33,8 @@ class ResultCollectionBuilder extends CollectionBuilderBase
         $this->q->addField("programs", "NQMS");
         $this->q->addField("programs", "ADA");
         $this->q->addExpression("json_unquote(json_extract(programs.title, '$.en'))", ProgramFields::displayTitle);
+        $this->q->addExpression("json_unquote(json_extract(programs.title, '$.en'))", "program_title_en");
+        $this->q->addExpression("json_unquote(json_extract(programs.title, '$.fr'))", "program_title_fr");
         $this->q->addExpression("UPPER(title)", 'sortTitle');
 
         $this->q->condition('standing.field_standing_value', 'app-allowed');
