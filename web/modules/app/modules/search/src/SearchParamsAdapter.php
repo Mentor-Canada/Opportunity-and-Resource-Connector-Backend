@@ -83,8 +83,8 @@ class SearchParamsAdapter implements SearchParamsInterface
 
     public function focus(): ?array
     {
-        if($this->params['focus'] != 'all') {
-            return [$this->params['focus']];
+        if (!empty($this->params['focus'])) {
+            return explode(',', $this->params['focus']);
         }
         return null;
     }
