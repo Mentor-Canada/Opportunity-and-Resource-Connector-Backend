@@ -67,8 +67,8 @@ class SearchParamsAdapter implements SearchParamsInterface
 
     public function age(): ?array
     {
-        if($this->params['age'] != 'all') {
-            return [$this->params['age']];
+        if (!empty($this->params['age'])) {
+            return explode(',', $this->params['age']);
         }
         return null;
     }
