@@ -99,8 +99,8 @@ class SearchParamsAdapter implements SearchParamsInterface
 
     public function type(): ?array
     {
-        if($this->params['type'] != 'all') {
-            return [$this->params['type']];
+        if (!empty($this->params['type'])) {
+            return explode(',', $this->params['type']);
         }
         return null;
     }
