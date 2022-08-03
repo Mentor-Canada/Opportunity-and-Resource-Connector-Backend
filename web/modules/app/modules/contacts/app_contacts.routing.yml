@@ -1,0 +1,8 @@
+app.contacts.collection.json:
+  path: /api/contacts
+  methods:
+    - GET
+  defaults:
+    _controller: \Drupal\app_contacts\ContactsCollectionController::collection
+  requirements:
+    _access: 'TRUE'
