@@ -7,37 +7,14 @@ class ContactCollectionBuilder
     private ?string $filterType;
     private ?string $filterUuid;
 
-    public function __construct()
+    public function __construct($uuid = null, $type = null)
     {
-        $this->filterType = null;
-        $this->filterUuid = $_REQUEST['uuid'];
-    }
-
-    private function setFilterType()
-    {
-        if ($this->filterUuid) {
-            $q = \Drupal::database()->select('node', 'node');
-            $q->addField('node', 'type');
-            $q->condition('node.uuid', $this->filterUuid);
-            $q->condition('node.type', ['programs', 'organization'], 'IN');
-            $filterQuery = $q->execute()->fetchCol();
-            if (!empty($filterQuery)) {
-                $this->filterType = $filterQuery[0];
-            } else {
-                $q = \Drupal::database()->select('users', 'users');
-                $q->addField('users', 'uuid');
-                $q->condition('users.uuid', $this->filterUuid);
-                $filterQuery = $q->execute()->fetchCol();
-                if (!empty($filterQuery)) {
-                    $this->filterType = 'contact';
-                }
-            }
-        }
+        $this->filterType = $type;
+        $this->filterUuid = $uuid;
     }
 
     public function getCollection()
     {
-        $this->setFilterType();
         if ($this->filterType === 'contact') {
             return $this->getContact();
         }
