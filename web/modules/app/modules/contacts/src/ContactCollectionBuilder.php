@@ -88,6 +88,8 @@ class ContactCollectionBuilder
 
         foreach ($organizations as $organization) {
             $organization->title = json_decode($organization->title);
+            $organization->description = json_decode($organization->description);
+            $organization->location = json_decode($organization->location);
             $programs = $this->getProgramsForOrganization($organization->entityId);
             $organizationContacts = $this->getOrganizationContacts($organization);
             unset($organization->adminTargetIds);
@@ -347,6 +349,7 @@ class ContactCollectionBuilder
         $result = \Drupal::database()->query($sql, [':filterUuid' => $this->filterUuid]);
         $program = $result->fetchAll()[0];
         $this->addContactsToProgram($program);
+        $this->jsonDecodeProgramFields($program);
         unset($program->adminUid);
         return $program;
     }
@@ -390,9 +393,52 @@ class ContactCollectionBuilder
         $programs = $this->getAssociatedPrograms($organizationNid);
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
+            $this->jsonDecodeProgramFields($program);
             unset($program->adminUid);
         }
         return $programs;
+    }
+
+    private function jsonDecodeProgramFields($program)
+    {
+        $program->title = json_decode($program->title);
+        $program->programDescription = json_decode($program->programDescription);
+        $program->mentorDescription = json_decode($program->mentorDescription);
+        $program->programAccepting = json_decode($program->programAccepting);
+        $program->trainingDescription = json_decode($program->trainingDescription);
+        $program->focusArea = json_decode($program->focusArea);
+        $program->focusAreaOther = json_decode($program->focusAreaOther);
+        $program->primaryMeetingLocation = json_decode($program->primaryMeetingLocation);
+        $program->primaryMeetingLocationOther = json_decode($program->primaryMeetingLocationOther);
+        $program->typesOfMentoring = json_decode($program->typesOfMentoring);
+        $program->typesOfMentoringOther = json_decode($program->typesOfMentoringOther);
+        $program->programOperatedThrough = json_decode($program->programOperatedThrough);
+        $program->programOperatedThroughOther = json_decode($program->programOperatedThroughOther);
+        $program->meetingsScheduled = json_decode($program->meetingsScheduled);
+        $program->meetingsScheduledOther = json_decode($program->meetingsScheduledOther);
+        $program->programGendersServed = json_decode($program->programGendersServed);
+        $program->programGendersServedOther = json_decode($program->programGendersServedOther);
+        $program->programAgesServed = json_decode($program->programAgesServed);
+        $program->programAgesServedOther = json_decode($program->programAgesServedOther);
+        $program->programFamilyServed = json_decode($program->programFamilyServed);
+        $program->programFamilyServedOther = json_decode($program->programFamilyServedOther);
+        $program->programYouthServed = json_decode($program->programYouthServed);
+        $program->programYouthServedOther = json_decode($program->programYouthServedOther);
+        $program->programMentorGenders = json_decode($program->programMentorGenders);
+        $program->programMentorGendersOther = json_decode($program->programMentorGendersOther);
+        $program->programMentorAges = json_decode($program->programMentorAges);
+        $program->programMentorAgesOther = json_decode($program->programMentorAgesOther);
+        $program->nsBackgroundCheck = json_decode($program->nsBackgroundCheck);
+        $program->nsBackgroundCheckTypes = json_decode($program->nsBackgroundCheckTypes);
+        $program->nsPeerBackgroundCheck = json_decode($program->nsPeerBackgroundCheck);
+        $program->nsTrainingValue = json_decode($program->nsTrainingValue);
+        $program->mentorMonthCommitment = json_decode($program->mentorMonthCommitment);
+        $program->mentorFrequencyCommitment = json_decode($program->mentorFrequencyCommitment);
+        $program->mentorFrequencyCommitmentOther = json_decode($program->mentorFrequencyCommitmentOther);
+        $program->mentorHourlyCommitment = json_decode($program->mentorHourlyCommitment);
+        $program->communityBasedLocations = json_decode($program->communityBasedLocations);
+        $program->siteBasedLocations = json_decode($program->siteBasedLocations);
+        $program->eMentoringLocations = json_decode($program->eMentoringLocations);
     }
 
     private function getAssociatedPrograms($organizationNid)
