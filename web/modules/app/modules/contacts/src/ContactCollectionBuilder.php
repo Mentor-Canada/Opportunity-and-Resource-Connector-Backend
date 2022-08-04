@@ -110,6 +110,7 @@ class ContactCollectionBuilder
         $organizations = $q->execute()->fetchAll();
 
         foreach ($organizations as $organization) {
+            $organization->title = json_decode($organization->title);
             $programs = $this->getProgramsForOrganization($organization->entityId);
             $organizationContacts = $this->getOrganizationContacts($organization);
             unset($organization->adminTargetIds);
