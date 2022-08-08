@@ -103,6 +103,7 @@ class ContactCollectionBuilder
             unset($organization->adminTargetIds);
             $organization->contacts = $organizationContacts;
             $organization->programs = $programs;
+            $this->translateEntityFields($organization);
         }
         return $organizations;
     }
@@ -117,7 +118,7 @@ class ContactCollectionBuilder
             'contactType' => 'public',
             'firstName' => $organization->firstName,
             'lastName' => $organization->lastName,
-            'position' => $organization->position,
+            'position' => t($organization->position)->render(),
             'otherPosition' => $organization->otherPosition,
             'phone' => $organization->phone,
             'altPhone' => $organization->altPhone,
@@ -305,6 +306,7 @@ class ContactCollectionBuilder
         $this->addContactsToProgram($program);
         $this->jsonDecodeProgramFields($program);
         unset($program->adminUid);
+        $this->translateEntityFields($program);
         return $program;
     }
 
@@ -348,6 +350,7 @@ class ContactCollectionBuilder
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
             $this->jsonDecodeProgramFields($program);
+            $this->translateEntityFields($program);
             unset($program->adminUid);
         }
         return $programs;
@@ -719,9 +722,50 @@ class ContactCollectionBuilder
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
             $this->jsonDecodeProgramFields($program);
+            $this->translateEntityFields($program);
             unset($program->adminUid);
         }
         return $programs;
+    }
+
+    private function translateEntityFields($entity)
+    {
+        $translatableFields['program'] = [
+            'programAccepting',
+            'focusArea',
+            'primaryMeetingLocation',
+            'typesOfMentoring',
+            'programOperatedThrough',
+            'meetingsScheduled',
+            'programGendersServed',
+            'programAgesServed',
+            'programFamilyServed',
+            'programYouthServed',
+            'programMentorGenders',
+            'programMentorAges',
+            'nsBackgroundCheck',
+            'nsBackgroundCheckTypes',
+            'nsPeerBackgroundCheck',
+            'nsTrainingValue',
+            'mentorMonthCommitment',
+            'mentorFrequencyCommitment',
+            'mentorHourlyCommitment',
+        ];
+        $translatableFields['organization'] = [
+            'typeOfOrganization',
+            'taxStatus',
+            'position',
+        ];
+        foreach ($entity as $entityKey => &$entityValue) {
+            if (gettype($entityValue) === 'string' && in_array($entityKey, $translatableFields[$entity->type], true)) {
+                $entity->{$entityKey} = t($entityValue)->render();
+            }
+            if (gettype($entityValue) === 'array' && in_array($entityKey, $translatableFields[$entity->type], true)) {
+                foreach ($entityValue as $arrayIndex => $arrayValue) {
+                    $entityValue[$arrayIndex] = t($arrayValue)->render();
+                }
+            }
+        }
     }
 
 }
