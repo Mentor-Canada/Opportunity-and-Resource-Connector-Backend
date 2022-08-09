@@ -5,4 +5,4 @@ app.contacts.collection.json:
   defaults:
     _controller: \Drupal\app_contacts\ContactsCollectionController::collection
   requirements:
-    _access: 'TRUE'
+    _custom_access: \Drupal\app_contacts\ContactsCollectionController::checkTokenValidity

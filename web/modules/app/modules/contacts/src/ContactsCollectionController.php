@@ -2,7 +2,9 @@
 
 namespace Drupal\app_contacts;
 
+use Drupal\Core\Access\AccessResult;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContactsCollectionController
@@ -41,5 +43,13 @@ class ContactsCollectionController
         }
 
         return null;
+    }
+
+    public static function checkTokenValidity(): AccessResult
+    {
+        $expectedToken = $_ENV['CONTACTS_API_TOKEN'];
+        $request = Request::createFromGlobals();
+        $tokenFromRequest = $request->headers->get('token');
+        return $tokenFromRequest === $expectedToken ? AccessResult::allowed() : AccessResult::forbidden();
     }
 }
