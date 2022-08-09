@@ -113,7 +113,6 @@ class ContactCollectionBuilder
         $organizationAdmins = $this->getAssociatedAccounts($organization->adminTargetIds);
         $allOrganizationContacts = [];
         $organizationPublicContact = [
-            'uuid' => '',
             'type' => 'contact',
             'contactType' => 'public',
             'firstName' => $organization->firstName,
@@ -126,10 +125,6 @@ class ContactCollectionBuilder
             'website' => $organization->website
         ];
         foreach ($organizationAdmins as $admin) {
-            if ($admin->adminEmail === $organization->email) {
-                $organizationPublicContact['uuid'] = $admin->uuid;
-                continue;
-            }
             $additionalOrganizationAdmin = [
                 'uuid' => $admin->uuid,
                 'type' => 'contact',
@@ -315,7 +310,6 @@ class ContactCollectionBuilder
         $allProgramContacts = [];
         $programAdmins = $this->getAssociatedAccounts($program->adminUid);
         $programPublicContact = [
-            'uuid' => '',
             'type' => 'contact',
             'contactType' => 'public',
             'firstName' => $program->firstName,
@@ -326,10 +320,6 @@ class ContactCollectionBuilder
             'altPhone' => $program->altPhone
         ];
         foreach ($programAdmins as $admin) {
-            if ($admin->adminEmail === $program->email) {
-                $programPublicContact['uuid'] = $admin->uuid;
-                continue;
-            }
             $additionalProgramAdmin = [
                 'uuid' => $admin->uuid,
                 'type' => 'contact',
