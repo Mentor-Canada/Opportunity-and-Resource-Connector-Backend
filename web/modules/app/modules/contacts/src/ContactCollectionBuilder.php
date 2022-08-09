@@ -118,7 +118,7 @@ class ContactCollectionBuilder
             'contactType' => 'public',
             'firstName' => $organization->firstName,
             'lastName' => $organization->lastName,
-            'position' => t($organization->position)->render(),
+            'position' => $organization->position ? t($organization->position)->render() : "",
             'otherPosition' => $organization->otherPosition,
             'phone' => $organization->phone,
             'altPhone' => $organization->altPhone,
