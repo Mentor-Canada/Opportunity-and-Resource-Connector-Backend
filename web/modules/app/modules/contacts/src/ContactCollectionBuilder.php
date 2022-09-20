@@ -6,26 +6,38 @@ class ContactCollectionBuilder
 {
     private ?string $filterType;
     private ?string $filterUuid;
+    private int $limit;
+    private int $offset;
+    private int $totalOrganizationAmount;
 
     public function __construct($uuid = null, $type = null)
     {
         $this->filterType = $type;
         $this->filterUuid = $uuid;
+        $fromIndex = $_REQUEST['fromIndex'] ?? 1;
+        $toIndex = $_REQUEST['toIndex'] ?? (intval($fromIndex) + 24);
+        $this->offset = intval($fromIndex) - 1;
+        $this->limit = intval($toIndex);
     }
 
     public function getCollection()
     {
         if ($this->filterType === 'contact') {
-            return $this->getContact();
+            return ['data' => $this->getContact()];
         }
         if ($this->filterType === 'programs') {
-            return $this->getProgram();
+            return ['data' => $this->getProgram()];
         }
         if ($this->filterType === 'organization') {
-            return $this->getOrganizations();
+            return ['data' => $this->getOrganizations()];
         }
-        $entityList[] = $this->getOrganizations();
-        $entityList[] = [
+
+        $organizations = $this->getOrganizations();
+        $entityList['meta']['totalData'] = $this->totalOrganizationAmount;
+        $entityList['meta']['fromIndex'] = $this->offset + 1;
+        $entityList['meta']['toIndex'] = $this->limit;
+        $entityList['data'][] = $organizations;
+        $entityList['data'][] = [
             'type' => 'programs-without-an-organization',
             'programs' => $this->getProgramsWithoutAnOrganization()
         ];
@@ -89,6 +101,10 @@ class ContactCollectionBuilder
         $q->leftJoin('node__field_administrators', 'admins', 'node.nid = admins.entity_id');
         $q->addExpression("JSON_ARRAYAGG(admins.field_administrators_target_id)", 'adminTargetIds');
         $q->groupBy('node.nid');
+        if (!$this->filterType) {
+            $this->totalOrganizationAmount = $q->countQuery()->execute()->fetchField();
+            $q->range($this->offset, ($this->limit - $this->offset));
+        }
         if ($this->filterType === 'organization') {
             $q->condition('node.uuid', $this->filterUuid);
         }

@@ -20,7 +20,7 @@ class ContactsCollectionController
         }
 
         $builder = new ContactCollectionBuilder($_REQUEST['uuid'], $filterType);
-        return new JsonResponse(['data' => $builder->getCollection()]);
+        return new JsonResponse($builder->getCollection());
     }
 
     private static function getFilterType($uuid): ?string
