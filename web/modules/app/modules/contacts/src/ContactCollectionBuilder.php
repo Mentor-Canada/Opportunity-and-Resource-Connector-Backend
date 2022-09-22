@@ -37,10 +37,7 @@ class ContactCollectionBuilder
         $entityList['meta']['fromIndex'] = $this->offset + 1;
         $entityList['meta']['toIndex'] = $this->limit;
         $entityList['data'][] = $organizations;
-        $entityList['data'][] = [
-            'type' => 'programs-without-an-organization',
-            'programs' => $this->getProgramsWithoutAnOrganization()
-        ];
+        $entityList['programs-without-an-organization'] = $this->getProgramsWithoutAnOrganization();
         return $entityList;
     }
 
