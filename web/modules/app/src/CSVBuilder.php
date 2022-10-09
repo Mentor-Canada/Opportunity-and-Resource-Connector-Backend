@@ -30,6 +30,9 @@ class CSVBuilder
             if (!$value) {
                 return "";
             }
+            if ($value == "null") {
+                return "";
+            }
             if ($localized && !empty($value)) {
                 return t($value);
             }
