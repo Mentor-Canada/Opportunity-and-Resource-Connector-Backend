@@ -26,9 +26,12 @@ class ProgramCollectionController extends CollectionControllerBase implements Co
         $builder = new CSVBuilder($this->data, "programs.csv");
         $builder
       /** General */
-      ->header("app-program-name")->text(ProgramFields::displayTitle)
-      ->header("app-program-description")->text(ProgramFields::description)
-      ->header("app-mentor-role-description")->text(ProgramFields::mentorDescription)
+      ->header("app-program-name-en")->text(ProgramFields::displayTitle)
+      ->header("app-program-name-fr")->text(ProgramFields::displayTitle . "_fr")
+      ->header("app-program-description-en")->text(ProgramFields::description)
+      ->header("app-program-description-fr")->text(ProgramFields::description . "_fr")
+      ->header("app-mentor-role-description-en")->text(ProgramFields::mentorDescription)
+      ->header("app-mentor-role-description-fr")->text(ProgramFields::mentorDescription . "_fr")
       ->header("app-organization")->text("organization_title")
 
       /** Currently Accepting */

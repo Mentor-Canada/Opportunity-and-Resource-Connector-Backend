@@ -32,6 +32,7 @@ class ProgramCollectionBuilder extends CollectionBuilderBase
 
         $this->q->leftJoin("programs", "programs", "node.nid = programs.entity_id");
         $this->q->addExpression("json_unquote(json_extract(programs.title, '$.en'))", ProgramFields::displayTitle);
+        $this->q->addExpression("json_unquote(json_extract(programs.title, '$.fr'))", ProgramFields::displayTitle . "_fr");
 
         if ($adapter->view == 'inquiry') {
             $this->programsWithInquiriesQ = $db->select('inquiries');
@@ -68,6 +69,8 @@ class ProgramCollectionBuilder extends CollectionBuilderBase
 
         $this->q->addExpression("json_unquote(json_extract(programs.programDescription, '$.en'))", ProgramFields::description);
         $this->q->addExpression("json_unquote(json_extract(programs.mentorDescription, '$.en'))", ProgramFields::mentorDescription);
+        $this->q->addExpression("json_unquote(json_extract(programs.programDescription, '$.fr'))", ProgramFields::description . "_fr");
+        $this->q->addExpression("json_unquote(json_extract(programs.mentorDescription, '$.fr'))", ProgramFields::mentorDescription . "_fr");
 
         $this->addMultipleValueField(ProgramFields::accepting);
         $this->addField(ProgramFields::facebook);
