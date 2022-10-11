@@ -30,7 +30,6 @@ class OrganizationCollectionController extends CollectionControllerBase implemen
             ->header("app-organization-description-en")->text("description_en")
             ->header("app-organization-description-fr")->text("description_fr")
             ->header("app-organization-legal-name")->text(OrganizationFields::legalName)
-            ->header("app-mentor-role-description")->callback(OrganizationFields::description, fn ($value) => json_decode($value)->en)
             ->header("app-organization-type")->text(OrganizationFields::type, true)
             ->header("app-organization-type-other")->text(OrganizationFields::typeOther)
             ->header("app-organization-tax-status")->text(OrganizationFields::taxStatus, true)
