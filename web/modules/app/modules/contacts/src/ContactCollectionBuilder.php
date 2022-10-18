@@ -125,18 +125,6 @@ class ContactCollectionBuilder
     {
         $organizationAdmins = $this->getAssociatedAccounts($organization->adminTargetIds);
         $allOrganizationContacts = [];
-        $organizationPublicContact = [
-            'type' => 'contact',
-            'contactType' => 'public',
-            'firstName' => $organization->firstName,
-            'lastName' => $organization->lastName,
-            'position' => $organization->position ? t($organization->position)->render() : "",
-            'otherPosition' => $organization->otherPosition,
-            'phone' => $organization->phone,
-            'altPhone' => $organization->altPhone,
-            'email' => $organization->email,
-            'website' => $organization->website
-        ];
         foreach ($organizationAdmins as $admin) {
             $additionalOrganizationAdmin = [
                 'uuid' => $admin->uuid,
@@ -146,9 +134,11 @@ class ContactCollectionBuilder
                 'lastName' => $admin->adminLastName,
                 'email' => $admin->adminEmail,
             ];
+            if (!$additionalOrganizationAdmin['lastName']) {
+                $additionalOrganizationAdmin['lastName'] = 'Unavailable';
+            }
             $allOrganizationContacts[] = $additionalOrganizationAdmin;
         }
-        $allOrganizationContacts[] = $organizationPublicContact;
         return $allOrganizationContacts;
     }
 
@@ -322,16 +312,6 @@ class ContactCollectionBuilder
     {
         $allProgramContacts = [];
         $programAdmins = $this->getAssociatedAccounts($program->adminUid);
-        $programPublicContact = [
-            'type' => 'contact',
-            'contactType' => 'public',
-            'firstName' => $program->firstName,
-            'lastName' => $program->lastName,
-            'position' => $program->position,
-            'email' => $program->email,
-            'phone' => $program->phone,
-            'altPhone' => $program->altPhone
-        ];
         foreach ($programAdmins as $admin) {
             $additionalProgramAdmin = [
                 'uuid' => $admin->uuid,
@@ -341,9 +321,11 @@ class ContactCollectionBuilder
                 'lastName' => $admin->adminLastName,
                 'email' => $admin->adminEmail,
             ];
+            if (!$additionalProgramAdmin['lastName']) {
+                $additionalProgramAdmin['lastName'] = 'Unavailable';
+            }
             $allProgramContacts[] = $additionalProgramAdmin;
         }
-        $allProgramContacts[] = $programPublicContact;
         $program->contacts = $allProgramContacts;
     }
 
