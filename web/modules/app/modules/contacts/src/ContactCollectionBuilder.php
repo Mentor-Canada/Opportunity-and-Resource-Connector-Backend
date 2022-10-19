@@ -70,17 +70,11 @@ class ContactCollectionBuilder
         $db = \Drupal::database();
         $q = $db->select('node', 'node');
         $q->addField('node', 'uuid');
-        $q->addField('node', 'type');
         $q->addField('node', 'nid', 'entityId');
         $q->condition('node.type', 'organization');
         $q->leftJoin('organizations', 'flatOrg', 'node.nid = flatOrg.entity_id');
         $q->addField('flatOrg', 'title');
         $q->addField('flatOrg', 'legal_name', 'legalName');
-        $q->addField('flatOrg', 'description');
-        $q->addField('flatOrg', 'type', 'typeOfOrganization');
-        $q->addField('flatOrg', 'other_type', 'typeOfOrganizationOther');
-        $q->addField('flatOrg', 'tax_status', 'taxStatus');
-        $q->addField('flatOrg', 'other_tax_status', 'otherTaxStatus');
         $q->addField('flatOrg', 'first_name', 'firstName');
         $q->addField('flatOrg', 'last_name', 'lastName');
         $q->addField('flatOrg', 'position');
@@ -89,12 +83,7 @@ class ContactCollectionBuilder
         $q->addField('flatOrg', 'alt_phone', 'altPhone');
         $q->addField('flatOrg', 'email', 'email');
         $q->addField('flatOrg', 'website', 'website');
-        $q->addField('flatOrg', 'has_location', 'hasLocation');
-        $q->addField('flatOrg', 'location');
         $q->addField('flatOrg', 'feedback');
-        $q->addField('flatOrg', 'mentor_city_enabled', 'mentorCityEnabled');
-        $q->addField('flatOrg', 'bbbsc_enabled', 'bbbscEnabled');
-        $q->addField('flatOrg', 'mtg_enabled', 'mtgEnabled');
         $q->leftJoin('node__field_administrators', 'admins', 'node.nid = admins.entity_id');
         $q->addExpression("JSON_ARRAYAGG(admins.field_administrators_target_id)", 'adminTargetIds');
         $q->groupBy('node.nid');
@@ -109,9 +98,7 @@ class ContactCollectionBuilder
 
         foreach ($organizations as $organization) {
             $organization->title = json_decode($organization->title);
-            $organization->description = json_decode($organization->description);
-            $organization->location = json_decode($organization->location);
-            $programs = $this->getProgramsForOrganization($organization->entityId);
+            $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
             unset($organization->adminTargetIds);
             $organization->contacts = $organizationContacts;
@@ -128,8 +115,7 @@ class ContactCollectionBuilder
         foreach ($organizationAdmins as $admin) {
             $additionalOrganizationAdmin = [
                 'uuid' => $admin->uuid,
-                'type' => 'contact',
-                'contactType' => 'organizationAdministrator',
+                'type' => 'organizationAdministrator',
                 'firstName' => $admin->adminFirstName,
                 'lastName' => $admin->adminLastName,
                 'email' => $admin->adminEmail,
@@ -147,11 +133,7 @@ class ContactCollectionBuilder
         $sql = "SELECT
             node.uuid,
             'program' as type,
-            node.nid as entityId,
             programs.title,
-            programs.programDescription,
-            programs.mentorDescription,
-            programAccepting,
             programs.first_name as  firstName,
             programs.last_name as  lastName,
             programs.position,
@@ -161,18 +143,6 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
-            programs.nationwideEMentoring,
-            programs.trainingDescription,
-            programs.responsivenessTier,
-            programs.NQMS,
-            programs.ADA,
-            programs.bbbsc,
-            programs.bbbscInquiryProgramOfInterest,
-            programs.bbbscProgramType,
-            programs.bbbscSystemUser,
-            programs.source,
-            programs.id211,
-            programs.external_id  as externalId,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -182,37 +152,8 @@ class ContactCollectionBuilder
             primaryMeetingLocationTable.field_primary_meeting_location_value as primaryMeetingLocation,
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
-            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,            
-            typesOfMentoring,
-            typesOfMentoringOtherTable.field_types_of_mentoring_other_value as typesOfMentoringOther,
-            programOperatedThrough,
-            programOperatedThroughOtherTable.field_program_operated_other_value as programOperatedThroughOther,
-            meetingsScheduled,
-            meetingsScheduledOtherTable.field_program_how_other_value as meetingsScheduledOther,
-            programGendersServed,
-            programGendersServedOtherTable.field_program_genders_other_value as programGendersServedOther,
-            programAgesServed,
-            programAgesServedOtherTable.field_program_ages_other_value as programAgesServedOther,
-            programFamilyServed,
-            programFamilyServedOtherTable.field_program_family_other_value as programFamilyServedOther,
-            programYouthServed,
-            programYouthServedOtherTable.field_program_youth_other_value as programYouthServedOther,
-            programMentorGenders,
-            programMentorGendersOtherTable.field_program_gender_mentor_oth_value as programMentorGendersOther,
-            programMentorAges,
-            programMentorAgesOtherTable.field_program_age_mentor_other_value as programMentorAgesOther,
-            nsBackgroundCheckTable.field_ns_bg_check_value as nsBackgroundCheck,
-            nsBackgroundCheckTypes,
-            nsPeerBackgroundCheckTable.field_ns_bg_peer_type_value as nsPeerBackgroundCheck,
-            nsTrainingValueTable.field_ns_training_value as nsTrainingValue,
-            mentorMonthCommitmentTable.field_program_mentor_month_commi_value as mentorMonthCommitment,
-            mentorFrequencyCommitmentTable.field_program_mentor_freq_commit_value as mentorFrequencyCommitment,
-            mentorFrequencyCommitmentOtherTable.field_program_mentor_freq_other_value as mentorFrequencyCommitmentOther,
-            mentorHourlyCommitmentTable.field_program_mentor_hour_commit_value as mentorHourlyCommitment,
-            adminUid,
-            communityBasedLocations,
-            siteBasedLocations,
-            eMentoringLocations
+            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
+            adminUid
             FROM node as node  
             LEFT JOIN programs ON programs.entity_id = node.nid    
             LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid    
@@ -302,7 +243,7 @@ class ContactCollectionBuilder
         $result = \Drupal::database()->query($sql, [':filterUuid' => $this->filterUuid]);
         $program = $result->fetchAll()[0];
         $this->addContactsToProgram($program);
-        $this->jsonDecodeProgramFields($program);
+        $program->title = json_decode($program->title);
         unset($program->adminUid);
         $this->translateEntityFields($program);
         return $program;
@@ -315,8 +256,7 @@ class ContactCollectionBuilder
         foreach ($programAdmins as $admin) {
             $additionalProgramAdmin = [
                 'uuid' => $admin->uuid,
-                'type' => 'contact',
-                'contactType' => 'programAdministrator',
+                'type' => 'programAdministrator',
                 'firstName' => $admin->adminFirstName,
                 'lastName' => $admin->adminLastName,
                 'email' => $admin->adminEmail,
@@ -329,38 +269,17 @@ class ContactCollectionBuilder
         $program->contacts = $allProgramContacts;
     }
 
-    private function getProgramsForOrganization($organizationNid)
+    private function getProgramsForOrganization($organization)
     {
-        $programs = $this->getAssociatedPrograms($organizationNid);
+        $programs = $this->getAssociatedPrograms($organization->entityId);
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
-            $this->jsonDecodeProgramFields($program);
+            $program->title = json_decode($program->title);
             $this->translateEntityFields($program);
             unset($program->adminUid);
         }
+        unset($organization->entityId);
         return $programs;
-    }
-
-    private function jsonDecodeProgramFields($program)
-    {
-        $program->title = json_decode($program->title);
-        $program->programDescription = json_decode($program->programDescription);
-        $program->mentorDescription = json_decode($program->mentorDescription);
-        $program->programAccepting = json_decode($program->programAccepting);
-        $program->trainingDescription = json_decode($program->trainingDescription);
-        $program->typesOfMentoring = json_decode($program->typesOfMentoring);
-        $program->programOperatedThrough = json_decode($program->programOperatedThrough);
-        $program->meetingsScheduled = json_decode($program->meetingsScheduled);
-        $program->programGendersServed = json_decode($program->programGendersServed);
-        $program->programAgesServed = json_decode($program->programAgesServed);
-        $program->programFamilyServed = json_decode($program->programFamilyServed);
-        $program->programYouthServed = json_decode($program->programYouthServed);
-        $program->programMentorGenders = json_decode($program->programMentorGenders);
-        $program->programMentorAges = json_decode($program->programMentorAges);
-        $program->nsBackgroundCheckTypes = json_decode($program->nsBackgroundCheckTypes);
-        $program->communityBasedLocations = json_decode($program->communityBasedLocations);
-        $program->siteBasedLocations = json_decode($program->siteBasedLocations);
-        $program->eMentoringLocations = json_decode($program->eMentoringLocations);
     }
 
     private function getAssociatedPrograms($organizationNid)
@@ -368,11 +287,7 @@ class ContactCollectionBuilder
         $sql = "SELECT
             node.uuid,
             'program' as type,
-            orgEntity.entity_id as entityId,
             programs.title,
-            programs.programDescription,
-            programs.mentorDescription,
-            programAccepting,
             programs.first_name as  firstName,
             programs.last_name as  lastName,
             programs.position,
@@ -382,18 +297,6 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
-            programs.nationwideEMentoring,
-            programs.trainingDescription,
-            programs.responsivenessTier,
-            programs.NQMS,
-            programs.ADA,
-            programs.bbbsc,
-            programs.bbbscInquiryProgramOfInterest,
-            programs.bbbscProgramType,
-            programs.bbbscSystemUser,
-            programs.source,
-            programs.id211,
-            programs.external_id as externalId,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -403,37 +306,8 @@ class ContactCollectionBuilder
             primaryMeetingLocationTable.field_primary_meeting_location_value as primaryMeetingLocation,
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
-            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,            
-            typesOfMentoring,
-            typesOfMentoringOtherTable.field_types_of_mentoring_other_value as typesOfMentoringOther,
-            programOperatedThrough,
-            programOperatedThroughOtherTable.field_program_operated_other_value as programOperatedThroughOther,
-            meetingsScheduled,
-            meetingsScheduledOtherTable.field_program_how_other_value as meetingsScheduledOther,
-            programGendersServed,
-            programGendersServedOtherTable.field_program_genders_other_value as programGendersServedOther,
-            programAgesServed,
-            programAgesServedOtherTable.field_program_ages_other_value as programAgesServedOther,
-            programFamilyServed,
-            programFamilyServedOtherTable.field_program_family_other_value as programFamilyServedOther,
-            programYouthServed,
-            programYouthServedOtherTable.field_program_youth_other_value as programYouthServedOther,
-            programMentorGenders,
-            programMentorGendersOtherTable.field_program_gender_mentor_oth_value as programMentorGendersOther,
-            programMentorAges,
-            programMentorAgesOtherTable.field_program_age_mentor_other_value as programMentorAgesOther,
-            nsBackgroundCheckTable.field_ns_bg_check_value as nsBackgroundCheck,
-            nsBackgroundCheckTypes,
-            nsPeerBackgroundCheckTable.field_ns_bg_peer_type_value as nsPeerBackgroundCheck,
-            nsTrainingValueTable.field_ns_training_value as nsTrainingValue,
-            mentorMonthCommitmentTable.field_program_mentor_month_commi_value as mentorMonthCommitment,
-            mentorFrequencyCommitmentTable.field_program_mentor_freq_commit_value as mentorFrequencyCommitment,
-            mentorFrequencyCommitmentOtherTable.field_program_mentor_freq_other_value as mentorFrequencyCommitmentOther,
-            mentorHourlyCommitmentTable.field_program_mentor_hour_commit_value as mentorHourlyCommitment,
-            adminUid,
-            communityBasedLocations,
-            siteBasedLocations,
-            eMentoringLocations
+            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,    
+            adminUid
             FROM node__field_organization_entity as orgEntity
             LEFT JOIN node ON node.nid = orgEntity.entity_id    
             LEFT JOIN programs ON programs.entity_id = orgEntity.entity_id    
@@ -549,11 +423,7 @@ class ContactCollectionBuilder
         $sql = "SELECT
             node.uuid,
             'program' as type,
-            node.nid as entityId,
             programs.title,
-            programs.programDescription,
-            programs.mentorDescription,
-            programAccepting,
             programs.first_name as  firstName,
             programs.last_name as  lastName,
             programs.position,
@@ -563,18 +433,6 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
-            programs.nationwideEMentoring,
-            programs.trainingDescription,
-            programs.responsivenessTier,
-            programs.NQMS,
-            programs.ADA,
-            programs.bbbsc,
-            programs.bbbscInquiryProgramOfInterest,
-            programs.bbbscProgramType,
-            programs.bbbscSystemUser,
-            programs.source,
-            programs.id211,
-            programs.external_id  as externalId,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -584,37 +442,8 @@ class ContactCollectionBuilder
             primaryMeetingLocationTable.field_primary_meeting_location_value as primaryMeetingLocation,
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
-            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,            
-            typesOfMentoring,
-            typesOfMentoringOtherTable.field_types_of_mentoring_other_value as typesOfMentoringOther,
-            programOperatedThrough,
-            programOperatedThroughOtherTable.field_program_operated_other_value as programOperatedThroughOther,
-            meetingsScheduled,
-            meetingsScheduledOtherTable.field_program_how_other_value as meetingsScheduledOther,
-            programGendersServed,
-            programGendersServedOtherTable.field_program_genders_other_value as programGendersServedOther,
-            programAgesServed,
-            programAgesServedOtherTable.field_program_ages_other_value as programAgesServedOther,
-            programFamilyServed,
-            programFamilyServedOtherTable.field_program_family_other_value as programFamilyServedOther,
-            programYouthServed,
-            programYouthServedOtherTable.field_program_youth_other_value as programYouthServedOther,
-            programMentorGenders,
-            programMentorGendersOtherTable.field_program_gender_mentor_oth_value as programMentorGendersOther,
-            programMentorAges,
-            programMentorAgesOtherTable.field_program_age_mentor_other_value as programMentorAgesOther,
-            nsBackgroundCheckTable.field_ns_bg_check_value as nsBackgroundCheck,
-            nsBackgroundCheckTypes,
-            nsPeerBackgroundCheckTable.field_ns_bg_peer_type_value as nsPeerBackgroundCheck,
-            nsTrainingValueTable.field_ns_training_value as nsTrainingValue,
-            mentorMonthCommitmentTable.field_program_mentor_month_commi_value as mentorMonthCommitment,
-            mentorFrequencyCommitmentTable.field_program_mentor_freq_commit_value as mentorFrequencyCommitment,
-            mentorFrequencyCommitmentOtherTable.field_program_mentor_freq_other_value as mentorFrequencyCommitmentOther,
-            mentorHourlyCommitmentTable.field_program_mentor_hour_commit_value as mentorHourlyCommitment,
-            adminUid,
-            communityBasedLocations,
-            siteBasedLocations,
-            eMentoringLocations
+            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
+            adminUid
             FROM node as node  
             LEFT JOIN programs ON programs.entity_id = node.nid
             LEFT JOIN  node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id    
@@ -706,7 +535,7 @@ class ContactCollectionBuilder
         $programs = \Drupal::database()->query($sql)->fetchAll();
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
-            $this->jsonDecodeProgramFields($program);
+            $program->title = json_decode($program->title);
             $this->translateEntityFields($program);
             unset($program->adminUid);
         }
