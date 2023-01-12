@@ -27,7 +27,6 @@ WHERE programs_locations.type = 'communityBased' AND programs.communityBased = 1
             $contains = $this->contains($location, $adapter->location());
             if ($contains) {
                 $this->rows[] = $row;
-                break;
             }
         }
 
