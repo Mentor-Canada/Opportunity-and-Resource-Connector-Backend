@@ -32,7 +32,7 @@ class SearchParamsAdapter implements SearchParamsInterface
 
     public function location(): ?object
     {
-        return null;
+        return $this->place;
     }
 
     public function postalCode(): ?string
