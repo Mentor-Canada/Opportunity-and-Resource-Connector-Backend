@@ -153,90 +153,102 @@ class ContactCollectionBuilder
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
-            adminUid
-            FROM node as node  
-            LEFT JOIN programs ON programs.entity_id = node.nid    
-            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid    
-            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = node.nid    
-            LEFT JOIN node__field_website ON node__field_website.entity_id = node.nid    
+            adminUid,
+            'True' AS 'Mentor Connector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
+            FROM node as node
+            LEFT JOIN programs ON programs.entity_id = node.nid
+            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid
+            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = node.nid
+            LEFT JOIN node__field_website ON node__field_website.entity_id = node.nid
             LEFT JOIN node__field_instagram ON node__field_instagram.entity_id = node.nid
             LEFT JOIN node__field_program_youth_per_year ON node__field_program_youth_per_year.entity_id = node.nid
             LEFT JOIN node__field_program_mentees_waiting_li ON node__field_program_mentees_waiting_li.entity_id = node.nid
             LEFT JOIN node__field_focus_area as focusAreaTable ON focusAreaTable.entity_id = node.nid
-            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = node.nid       
-            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = node.nid             
+            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = node.nid
+            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = node.nid
             LEFT JOIN node__field_primary_meeting_loc_other as primaryMeetingLocationOtherTable ON primaryMeetingLocationOtherTable.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_program_operated_through_value) as programOperatedThrough
-                FROM node__field_program_operated_through 
+                FROM node__field_program_operated_through
                 GROUP BY entity_id) as programOperatedThrough ON programOperatedThrough.entity_id = node.nid
-            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = node.nid     
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled 
+            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = node.nid
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled
                 FROM node__field_program_how_are_meetings_s
-                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = node.nid          
+                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = node.nid
             LEFT JOIN node__field_program_how_other as meetingsScheduledOtherTable ON meetingsScheduledOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed
                 FROM node__field_program_genders_served
-                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = node.nid          
+                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = node.nid
             LEFT JOIN node__field_program_genders_other as programGendersServedOtherTable ON programGendersServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed
                 FROM node__field_program_ages_served
-                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = node.nid          
+                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = node.nid
             LEFT JOIN node__field_program_ages_other as programAgesServedOtherTable ON programAgesServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed
                 FROM node__field_program_family_served
-                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = node.nid          
+                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = node.nid
             LEFT JOIN node__field_program_family_other as programFamilyServedOtherTable ON programFamilyServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed
                 FROM node__field_program_youth_served
-                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = node.nid          
+                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = node.nid
             LEFT JOIN node__field_program_youth_other as programYouthServedOtherTable ON programYouthServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders
                 FROM node__field_program_gender_mentor_targ
-                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = node.nid          
+                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = node.nid
             LEFT JOIN node__field_program_gender_mentor_oth as programMentorGendersOtherTable ON programMentorGendersOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges
                 FROM node__field_program_ages_mentor_target
-                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = node.nid          
+                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = node.nid
             LEFT JOIN node__field_program_age_mentor_other as programMentorAgesOtherTable ON programMentorAgesOtherTable.entity_id = node.nid
             LEFT JOIN node__field_ns_bg_check as nsBackgroundCheckTable ON nsBackgroundCheckTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes
                 FROM node__field_ns_bg_check_types
-                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = node.nid          
-            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = node.nid   
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting 
-                FROM node__field_program_accepting 
+                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = node.nid
+            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = node.nid
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting
+                FROM node__field_program_accepting
                 GROUP BY entity_id) as accepting ON accepting.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring 
-                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = node.nid             
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring
+                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = node.nid
             LEFT JOIN node__field_ns_bg_peer_type as nsPeerBackgroundCheckTable ON nsPeerBackgroundCheckTable.entity_id = node.nid
-            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = node.nid           
+            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_month_commi as mentorMonthCommitmentTable ON mentorMonthCommitmentTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_freq_commit as mentorFrequencyCommitmentTable ON mentorFrequencyCommitmentTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_freq_other as mentorFrequencyCommitmentOtherTable ON mentorFrequencyCommitmentOtherTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_hour_commit as mentorHourlyCommitmentTable ON mentorHourlyCommitmentTable.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_administrators_target_id) as adminUid
                 FROM node__field_administrators GROUP BY entity_id) as adminUid ON adminUid.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as siteBasedLocations
-                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as communityBasedLocations
-                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as eMentoringLocations
-                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid    
+                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid
+            LEFT JOIN
+                (
+                  SELECT m.entity_id, status = 'active' as status
+                  FROM mentorcity_invitations m
+                  JOIN (
+                    SELECT entity_id, MAX(created_date) AS latest_date
+                    FROM mentorcity_invitations
+                    GROUP BY entity_id
+                  ) t ON m.entity_id = t.entity_id AND m.created_date = t.latest_date
+                ) as mentorCityInvitations ON mentorCityInvitations.entity_id = node.nid
             WHERE node.uuid = :filterUuid
             ";
 
@@ -306,92 +318,104 @@ class ContactCollectionBuilder
             primaryMeetingLocationTable.field_primary_meeting_location_value as primaryMeetingLocation,
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
-            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,    
-            adminUid
+            node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
+            adminUid,
+            'True' AS 'Mentor Connector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
             FROM node__field_organization_entity as orgEntity
-            LEFT JOIN node ON node.nid = orgEntity.entity_id    
-            LEFT JOIN programs ON programs.entity_id = orgEntity.entity_id    
-            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = orgEntity.entity_id    
-            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = orgEntity.entity_id    
-            LEFT JOIN node__field_website ON node__field_website.entity_id = orgEntity.entity_id    
+            LEFT JOIN node ON node.nid = orgEntity.entity_id
+            LEFT JOIN programs ON programs.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_website ON node__field_website.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_instagram ON node__field_instagram.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_youth_per_year ON node__field_program_youth_per_year.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_mentees_waiting_li ON node__field_program_mentees_waiting_li.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_focus_area as focusAreaTable ON focusAreaTable.entity_id = orgEntity.entity_id
-            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = orgEntity.entity_id       
-            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = orgEntity.entity_id             
+            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_primary_meeting_loc_other as primaryMeetingLocationOtherTable ON primaryMeetingLocationOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_program_operated_through_value) as programOperatedThrough
-                FROM node__field_program_operated_through 
+                FROM node__field_program_operated_through
                 GROUP BY entity_id) as programOperatedThrough ON programOperatedThrough.entity_id = orgEntity.entity_id
-            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = orgEntity.entity_id  
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled 
+            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = orgEntity.entity_id
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled
                 FROM node__field_program_how_are_meetings_s
-                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_how_other as meetingsScheduledOtherTable ON meetingsScheduledOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed
                 FROM node__field_program_genders_served
-                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_genders_other as programGendersServedOtherTable ON programGendersServedOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed
                 FROM node__field_program_ages_served
-                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_ages_other as programAgesServedOtherTable ON programAgesServedOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed
                 FROM node__field_program_family_served
-                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_family_other as programFamilyServedOtherTable ON programFamilyServedOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed
                 FROM node__field_program_youth_served
-                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_youth_other as programYouthServedOtherTable ON programYouthServedOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders
                 FROM node__field_program_gender_mentor_targ
-                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_gender_mentor_oth as programMentorGendersOtherTable ON programMentorGendersOtherTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges
                 FROM node__field_program_ages_mentor_target
-                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = orgEntity.entity_id          
+                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_age_mentor_other as programMentorAgesOtherTable ON programMentorAgesOtherTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_ns_bg_check as nsBackgroundCheckTable ON nsBackgroundCheckTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes
                 FROM node__field_ns_bg_check_types
-                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = orgEntity.entity_id          
-            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = orgEntity.entity_id   
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting 
-                FROM node__field_program_accepting 
+                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = orgEntity.entity_id
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting
+                FROM node__field_program_accepting
                 GROUP BY entity_id) as accepting ON accepting.entity_id = orgEntity.entity_id
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring 
-                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = orgEntity.entity_id             
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring
+                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_ns_bg_peer_type as nsPeerBackgroundCheckTable ON nsPeerBackgroundCheckTable.entity_id = orgEntity.entity_id
-            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = orgEntity.entity_id           
+            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_mentor_month_commi as mentorMonthCommitmentTable ON mentorMonthCommitmentTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_mentor_freq_commit as mentorFrequencyCommitmentTable ON mentorFrequencyCommitmentTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_mentor_freq_other as mentorFrequencyCommitmentOtherTable ON mentorFrequencyCommitmentOtherTable.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_program_mentor_hour_commit as mentorHourlyCommitmentTable ON mentorHourlyCommitmentTable.entity_id = orgEntity.entity_id
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_administrators_target_id) as adminUid
                 FROM node__field_administrators GROUP BY entity_id) as adminUid ON adminUid.entity_id = orgEntity.entity_id
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as siteBasedLocations
-                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as communityBasedLocations
-                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as eMentoringLocations
-                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid      
+                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid
+            LEFT JOIN
+                (
+                  SELECT m.entity_id, status = 'active' as status
+                  FROM mentorcity_invitations m
+                  JOIN (
+                    SELECT entity_id, MAX(created_date) AS latest_date
+                    FROM mentorcity_invitations
+                    GROUP BY entity_id
+                  ) t ON m.entity_id = t.entity_id AND m.created_date = t.latest_date
+                ) as mentorCityInvitations ON mentorCityInvitations.entity_id = node.nid
             WHERE orgEntity.field_organization_entity_target_id = :organizationNid
             AND orgEntity.bundle = 'programs'
             AND node.uuid IS NOT NULL
@@ -443,92 +467,104 @@ class ContactCollectionBuilder
             primaryMeetingLocationOtherTable.field_primary_meeting_loc_other_value as primaryMeetingLocationOther,
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
-            adminUid
-            FROM node as node  
+            adminUid,
+            'True' AS 'Mentor Connector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
+            FROM node as node
             LEFT JOIN programs ON programs.entity_id = node.nid
-            LEFT JOIN  node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id    
-            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid    
-            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = node.nid    
-            LEFT JOIN node__field_website ON node__field_website.entity_id = node.nid    
+            LEFT JOIN  node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid
+            LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = node.nid
+            LEFT JOIN node__field_website ON node__field_website.entity_id = node.nid
             LEFT JOIN node__field_instagram ON node__field_instagram.entity_id = node.nid
             LEFT JOIN node__field_program_youth_per_year ON node__field_program_youth_per_year.entity_id = node.nid
             LEFT JOIN node__field_program_mentees_waiting_li ON node__field_program_mentees_waiting_li.entity_id = node.nid
             LEFT JOIN node__field_focus_area as focusAreaTable ON focusAreaTable.entity_id = node.nid
-            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = node.nid       
-            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = node.nid             
+            LEFT JOIN node__field_focus_area_other as focusAreaOtherTable ON focusAreaOtherTable.entity_id = node.nid
+            LEFT JOIN node__field_primary_meeting_location as primaryMeetingLocationTable ON primaryMeetingLocationTable.entity_id = node.nid
             LEFT JOIN node__field_primary_meeting_loc_other as primaryMeetingLocationOtherTable ON primaryMeetingLocationOtherTable.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_program_operated_through_value) as programOperatedThrough
-                FROM node__field_program_operated_through 
+                FROM node__field_program_operated_through
                 GROUP BY entity_id) as programOperatedThrough ON programOperatedThrough.entity_id = node.nid
-            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = node.nid     
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled 
+            LEFT JOIN node__field_program_operated_other as programOperatedThroughOtherTable ON programOperatedThroughOtherTable.entity_id = node.nid
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_how_are_meetings_s_value) as meetingsScheduled
                 FROM node__field_program_how_are_meetings_s
-                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = node.nid          
+                GROUP BY entity_id) as meetingsScheduled ON meetingsScheduled.entity_id = node.nid
             LEFT JOIN node__field_program_how_other as meetingsScheduledOtherTable ON meetingsScheduledOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_genders_served_value) as programGendersServed
                 FROM node__field_program_genders_served
-                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = node.nid          
+                GROUP BY entity_id) as programGendersServed ON programGendersServed.entity_id = node.nid
             LEFT JOIN node__field_program_genders_other as programGendersServedOtherTable ON programGendersServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_served_value) as programAgesServed
                 FROM node__field_program_ages_served
-                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = node.nid          
+                GROUP BY entity_id) as programAgesServed ON programAgesServed.entity_id = node.nid
             LEFT JOIN node__field_program_ages_other as programAgesServedOtherTable ON programAgesServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_family_served_value) as programfamilyServed
                 FROM node__field_program_family_served
-                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = node.nid          
+                GROUP BY entity_id) as programfamilyServed ON programfamilyServed.entity_id = node.nid
             LEFT JOIN node__field_program_family_other as programFamilyServedOtherTable ON programFamilyServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_youth_served_value) as programYouthServed
                 FROM node__field_program_youth_served
-                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = node.nid          
+                GROUP BY entity_id) as programYouthServed ON programYouthServed.entity_id = node.nid
             LEFT JOIN node__field_program_youth_other as programYouthServedOtherTable ON programYouthServedOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_gender_mentor_targ_value) as programMentorGenders
                 FROM node__field_program_gender_mentor_targ
-                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = node.nid          
+                GROUP BY entity_id) as programMentorGenders ON programMentorGenders.entity_id = node.nid
             LEFT JOIN node__field_program_gender_mentor_oth as programMentorGendersOtherTable ON programMentorGendersOtherTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_ages_mentor_target_value) as programMentorAges
                 FROM node__field_program_ages_mentor_target
-                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = node.nid          
+                GROUP BY entity_id) as programMentorAges ON programMentorAges.entity_id = node.nid
             LEFT JOIN node__field_program_age_mentor_other as programMentorAgesOtherTable ON programMentorAgesOtherTable.entity_id = node.nid
             LEFT JOIN node__field_ns_bg_check as nsBackgroundCheckTable ON nsBackgroundCheckTable.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes 
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_ns_bg_check_types_value) as nsBackgroundCheckTypes
                 FROM node__field_ns_bg_check_types
-                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = node.nid          
-            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = node.nid   
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting 
-                FROM node__field_program_accepting 
+                GROUP BY entity_id) as nsBackgroundCheckTypes ON nsBackgroundCheckTypes.entity_id = node.nid
+            LEFT JOIN node__field_ns_training as nsTrainingValueTable ON nsTrainingValueTable.entity_id = node.nid
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_program_accepting_value) as programAccepting
+                FROM node__field_program_accepting
                 GROUP BY entity_id) as accepting ON accepting.entity_id = node.nid
-            LEFT JOIN 
-                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring 
-                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = node.nid             
+            LEFT JOIN
+                (SELECT entity_id, JSON_ARRAYAGG(field_types_of_mentoring_value) as typesOfMentoring
+                FROM node__field_types_of_mentoring GROUP BY entity_id) as typesOfMentoring ON typesOfMentoring.entity_id = node.nid
             LEFT JOIN node__field_ns_bg_peer_type as nsPeerBackgroundCheckTable ON nsPeerBackgroundCheckTable.entity_id = node.nid
-            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = node.nid           
+            LEFT JOIN node__field_types_of_mentoring_other as typesOfMentoringOtherTable ON typesOfMentoringOtherTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_month_commi as mentorMonthCommitmentTable ON mentorMonthCommitmentTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_freq_commit as mentorFrequencyCommitmentTable ON mentorFrequencyCommitmentTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_freq_other as mentorFrequencyCommitmentOtherTable ON mentorFrequencyCommitmentOtherTable.entity_id = node.nid
             LEFT JOIN node__field_program_mentor_hour_commit as mentorHourlyCommitmentTable ON mentorHourlyCommitmentTable.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(field_administrators_target_id) as adminUid
                 FROM node__field_administrators GROUP BY entity_id) as adminUid ON adminUid.entity_id = node.nid
-            LEFT JOIN 
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as siteBasedLocations
-                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'siteBased' GROUP BY entity_id) as siteBasedLocations ON siteBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as communityBasedLocations
-                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid    
-            LEFT JOIN 
+                FROM programs_locations where type = 'communityBased' GROUP BY entity_id) as communityBasedLocations ON communityBasedLocations.entity_id = node.nid
+            LEFT JOIN
                 (SELECT entity_id, JSON_ARRAYAGG(location) as eMentoringLocations
-                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid    
-            WHERE node.type = 'programs' 
+                FROM programs_locations where type = 'eMentoring' GROUP BY entity_id) as eMentoringLocations ON eMentoringLocations.entity_id = node.nid
+            LEFT JOIN
+                (
+                  SELECT m.entity_id, status = 'active' as status
+                  FROM mentorcity_invitations m
+                  JOIN (
+                    SELECT entity_id, MAX(created_date) AS latest_date
+                    FROM mentorcity_invitations
+                    GROUP BY entity_id
+                  ) t ON m.entity_id = t.entity_id AND m.created_date = t.latest_date
+                ) as mentorCityInvitations ON mentorCityInvitations.entity_id = node.nid
+            WHERE node.type = 'programs'
             AND orgEntity.entity_id IS NULL
             ";
 
