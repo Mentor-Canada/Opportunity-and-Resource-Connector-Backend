@@ -18,6 +18,9 @@ class ProgramCollectionBuilder
         $this->q->leftJoin("programs", "programs", "node.nid = programs.entity_id");
         $this->q->addField("programs", "title", 'name');
         $this->q->addField("programs", "programDescription", "description");
+        $this->q->addField("programs", "communityBased");
+        $this->q->addField("programs", "siteBased");
+        $this->q->addField("programs", "eMentoring");
 
         $sql = "CREATE TEMPORARY TABLE locations SELECT entity_id, JSON_ARRAYAGG(JSON_OBJECT('name', JSON_EXTRACT(location, '$.formatted_address'), 'lat', JSON_EXTRACT(location, '$.geometry.location.lat'), 'lng', JSON_EXTRACT(location, '$.geometry.location.lng'))) as locations FROM programs_locations GROUP BY entity_id";
         \Drupal::database()->query($sql);
