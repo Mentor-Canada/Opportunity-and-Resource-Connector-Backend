@@ -74,6 +74,7 @@ class ContactCollectionBuilder
         $q->condition('node.type', 'organization');
         $q->leftJoin('organizations', 'flatOrg', 'node.nid = flatOrg.entity_id');
         $q->addField('flatOrg', 'title');
+        $q->addField('flatOrg', 'description');
         $q->addField('flatOrg', 'legal_name', 'legalName');
         $q->addField('flatOrg', 'first_name', 'firstName');
         $q->addField('flatOrg', 'last_name', 'lastName');
@@ -84,9 +85,21 @@ class ContactCollectionBuilder
         $q->addField('flatOrg', 'email', 'email');
         $q->addField('flatOrg', 'website', 'website');
         $q->addField('flatOrg', 'feedback');
+        $q->addField('flatOrg', 'type');
+        $q->addField('flatOrg', 'other_type', 'typeOther');
+        $q->addField('flatOrg', 'tax_status', 'taxStatus');
+        $q->addField('flatOrg', 'other_tax_status', 'taxStatusOther');
+        $q->addField('flatOrg', 'mentor_city_enabled', 'VirtualMentoringPlatform');
+
+        $q->leftJoin('node__field_physical_location', 'location', 'node.nid = location.entity_id');
+        $q->addField('location', 'field_physical_location_name', 'address');
+
         $q->leftJoin('node__field_administrators', 'admins', 'node.nid = admins.entity_id');
         $q->addExpression("JSON_ARRAYAGG(admins.field_administrators_target_id)", 'adminTargetIds');
+
         $q->groupBy('node.nid');
+        $q->groupBy('location.field_physical_location_name');
+
         if (!$this->filterType) {
             $this->totalOrganizationAmount = $q->countQuery()->execute()->fetchField();
             $q->range($this->offset, ($this->limit - $this->offset));
@@ -98,6 +111,16 @@ class ContactCollectionBuilder
 
         foreach ($organizations as $organization) {
             $organization->title = json_decode($organization->title);
+            $organization->description = json_decode($organization->description);
+            $organization->type = t($organization->type);
+            $organization->typeOther = $organization->typeOther ?? "";
+            $organization->taxStatus = t($organization->taxStatus);
+            $organization->taxStatusOther = $organization->taxStatusOther ?? "";
+            $organization->position = $organization->position ? t($organization->position) : "";
+            $organization->otherPosition = $organization->otherPosition ?? "";
+            $organization->MentorConnector = 'True';
+            $organization->VirtualMentoringPlatform = $organization->VirtualMentoringPlatform == '1' ? 'True' : 'False';
+
             $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
             unset($organization->adminTargetIds);
@@ -154,8 +177,8 @@ class ContactCollectionBuilder
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
-            'True' AS 'Mentor Connector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
+            'True' AS 'MentorConnector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
             FROM node as node
             LEFT JOIN programs ON programs.entity_id = node.nid
             LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid
@@ -320,8 +343,8 @@ class ContactCollectionBuilder
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
-            'True' AS 'Mentor Connector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
+            'True' AS 'MentorConnector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
             FROM node__field_organization_entity as orgEntity
             LEFT JOIN node ON node.nid = orgEntity.entity_id
             LEFT JOIN programs ON programs.entity_id = orgEntity.entity_id
@@ -468,8 +491,8 @@ class ContactCollectionBuilder
             node__field_program_youth_per_year.field_program_youth_per_year_value as youthPerYear,
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
-            'True' AS 'Mentor Connector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'Virtual Mentoring Platform'
+            'True' AS 'MentorConnector',
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
             FROM node as node
             LEFT JOIN programs ON programs.entity_id = node.nid
             LEFT JOIN  node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id
