@@ -96,6 +96,7 @@ class ContactCollectionBuilder
 
         $q->leftJoin('node__field_administrators', 'admins', 'node.nid = admins.entity_id');
         $q->addExpression("JSON_ARRAYAGG(admins.field_administrators_target_id)", 'adminTargetIds');
+        $q->addExpression("(SELECT field_standing_value FROM node__field_standing WHERE node.nid = node__field_standing.entity_id AND node__field_standing.bundle = 'organization')", "status");
 
         $q->groupBy('node.nid');
 
@@ -121,6 +122,11 @@ class ContactCollectionBuilder
             $organization->VirtualMentoringPlatform = $organization->VirtualMentoringPlatform == '1' ? 'True' : 'False';
             $address = json_decode($organization->address, true);
             $organization->address = $address['formatted_address'];
+            if(!empty($organization->status)) {
+              $organization->status = t($organization->status, [], ['langcode' => 'en']);
+            } else {
+              $organization->status = "Pending";
+            }
 
             $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
