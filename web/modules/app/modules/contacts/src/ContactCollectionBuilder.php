@@ -92,13 +92,12 @@ class ContactCollectionBuilder
         $q->addField('flatOrg', 'mentor_city_enabled', 'VirtualMentoringPlatform');
 
         $q->leftJoin('node__field_physical_location', 'location', 'node.nid = location.entity_id');
-        $q->addField('location', 'field_physical_location_name', 'address');
+        $q->addField('flatOrg', 'location', 'address');
 
         $q->leftJoin('node__field_administrators', 'admins', 'node.nid = admins.entity_id');
         $q->addExpression("JSON_ARRAYAGG(admins.field_administrators_target_id)", 'adminTargetIds');
 
         $q->groupBy('node.nid');
-        $q->groupBy('location.field_physical_location_name');
 
         if (!$this->filterType) {
             $this->totalOrganizationAmount = $q->countQuery()->execute()->fetchField();
@@ -120,6 +119,8 @@ class ContactCollectionBuilder
             $organization->otherPosition = $organization->otherPosition ?? "";
             $organization->MentorConnector = 'True';
             $organization->VirtualMentoringPlatform = $organization->VirtualMentoringPlatform == '1' ? 'True' : 'False';
+            $address = json_decode($organization->address, true);
+            $organization->address = $address['formatted_address'];
 
             $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
