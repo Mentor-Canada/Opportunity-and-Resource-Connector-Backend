@@ -65,6 +65,14 @@ class ContactCollectionBuilder
         return $contact;
     }
 
+    private function getStatus($value)
+    {
+        if(empty($value)) {
+          return "Pending";
+        }
+        return t($value, [], ['langcode' => 'en']);
+    }
+
     private function getOrganizations()
     {
         $db = \Drupal::database();
@@ -122,11 +130,7 @@ class ContactCollectionBuilder
             $organization->VirtualMentoringPlatform = $organization->VirtualMentoringPlatform == '1' ? 'True' : 'False';
             $address = json_decode($organization->address, true);
             $organization->address = $address['formatted_address'];
-            if(!empty($organization->status)) {
-              $organization->status = t($organization->status, [], ['langcode' => 'en']);
-            } else {
-              $organization->status = "Pending";
-            }
+            $organization->status = self::getStatus($organization->status);
 
             $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
@@ -185,7 +189,8 @@ class ContactCollectionBuilder
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
             'True' AS 'MentorConnector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform',
+            (SELECT field_standing_value FROM node__field_standing WHERE node.nid = node__field_standing.entity_id AND node__field_standing.bundle = 'programs') AS status
             FROM node as node
             LEFT JOIN programs ON programs.entity_id = node.nid
             LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid
@@ -318,6 +323,7 @@ class ContactCollectionBuilder
             $this->addContactsToProgram($program);
             $program->title = json_decode($program->title);
             $this->translateEntityFields($program);
+            $program->status = self::getStatus($program->status);
             unset($program->adminUid);
         }
         unset($organization->entityId);
@@ -351,7 +357,8 @@ class ContactCollectionBuilder
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
             'True' AS 'MentorConnector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform',
+            (SELECT field_standing_value FROM node__field_standing WHERE node.nid = node__field_standing.entity_id AND node__field_standing.bundle = 'programs') AS status
             FROM node__field_organization_entity as orgEntity
             LEFT JOIN node ON node.nid = orgEntity.entity_id
             LEFT JOIN programs ON programs.entity_id = orgEntity.entity_id
@@ -499,10 +506,11 @@ class ContactCollectionBuilder
             node__field_program_mentees_waiting_li.field_program_mentees_waiting_li_value as menteesWaitingList,
             adminUid,
             'True' AS 'MentorConnector',
-            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform'
+            CASE WHEN mentorCityInvitations.status THEN 'True' ELSE 'False' END AS 'VirtualMentoringPlatform',
+            (SELECT field_standing_value FROM node__field_standing WHERE node.nid = node__field_standing.entity_id AND node__field_standing.bundle = 'programs') AS status
             FROM node as node
             LEFT JOIN programs ON programs.entity_id = node.nid
-            LEFT JOIN  node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id
+            LEFT JOIN node__field_organization_entity as orgEntity ON programs.entity_id = orgEntity.entity_id
             LEFT JOIN node__field_facebook ON node__field_facebook.entity_id = node.nid
             LEFT JOIN node__field_twitter ON node__field_twitter.entity_id = node.nid
             LEFT JOIN node__field_website ON node__field_website.entity_id = node.nid
@@ -603,6 +611,7 @@ class ContactCollectionBuilder
             $this->addContactsToProgram($program);
             $program->title = json_decode($program->title);
             $this->translateEntityFields($program);
+            $program->status = self::getStatus($program->status);
             unset($program->adminUid);
         }
         return $programs;
