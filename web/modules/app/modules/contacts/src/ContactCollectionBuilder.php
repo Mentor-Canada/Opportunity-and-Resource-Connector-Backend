@@ -98,6 +98,7 @@ class ContactCollectionBuilder
         $q->addField('flatOrg', 'tax_status', 'taxStatus');
         $q->addField('flatOrg', 'other_tax_status', 'taxStatusOther');
         $q->addField('flatOrg', 'mentor_city_enabled', 'VirtualMentoringPlatform');
+        $q->addField('flatOrg', 'has_location', 'hasPhysicalAddress');
 
         $q->leftJoin('node__field_physical_location', 'location', 'node.nid = location.entity_id');
         $q->addField('flatOrg', 'location', 'address');
@@ -131,6 +132,7 @@ class ContactCollectionBuilder
             $address = json_decode($organization->address, true);
             $organization->address = $address['formatted_address'];
             $organization->status = self::getStatus($organization->status);
+            $organization->hasPhysicalAddress = $organization->hasPhysicalAddress == '1' ? 'True' : 'False';
 
             $programs = $this->getProgramsForOrganization($organization);
             $organizationContacts = $this->getOrganizationContacts($organization);
