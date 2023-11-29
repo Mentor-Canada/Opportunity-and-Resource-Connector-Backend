@@ -179,6 +179,7 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
+            programs.programDescription as description,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -293,6 +294,7 @@ class ContactCollectionBuilder
         $program = $result->fetchAll()[0];
         $this->addContactsToProgram($program);
         $program->title = json_decode($program->title);
+        $program->description = json_decode($program->description);
         unset($program->adminUid);
         $this->translateEntityFields($program);
         return $program;
@@ -324,6 +326,7 @@ class ContactCollectionBuilder
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
             $program->title = json_decode($program->title);
+            $program->description = json_decode($program->description);
             $this->translateEntityFields($program);
             $program->status = self::getStatus($program->status);
             unset($program->adminUid);
@@ -347,6 +350,7 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
+            programs.programDescription as description,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -496,6 +500,7 @@ class ContactCollectionBuilder
             programs.communityBased,
             programs.siteBased,
             programs.eMentoring,
+            programs.programDescription as description,
             node__field_facebook.field_facebook_value as facebook,
             node__field_twitter.field_twitter_value as twitter,
             node__field_website.field_website_value as website,
@@ -612,6 +617,7 @@ class ContactCollectionBuilder
         foreach ($programs as $program) {
             $this->addContactsToProgram($program);
             $program->title = json_decode($program->title);
+            $program->description = json_decode($program->description);
             $this->translateEntityFields($program);
             $program->status = self::getStatus($program->status);
             unset($program->adminUid);
