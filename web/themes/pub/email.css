@@ -4,9 +4,9 @@
   width: 100%;
   max-width: 600px;
   height: 100%;
-  border: 1px solid #002745;
+  border: 1px solid #edf0f5;
   border-spacing: 0;
-  background: #002745;
+  background: #f7f9fc;
   font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 }
 
@@ -36,6 +36,7 @@
   width: 100%;
   height: 100%;
   background: #ffffff;
+  border: 1px solid #edf0f5;
 }
 
 .email tr.body > td table.body-table tr.body-body > td {
@@ -48,11 +49,11 @@
 
 .email tr.footer > td .footer-summary {
   font-size: 12px;
-  color: #6b8399;
+  color: #38445C;
 }
 
 .email tr.footer > td .footer-summary a {
-  color: #a4daff;
+  color: #2979ff;
 }
 
 .email tr.footer > td .footer-summary .footer-contact-block {
@@ -70,7 +71,7 @@
 
 .email tr.footer > td .footer-summary .footer-contact-title {
   font-weight: 700;
-  color: #88afcc;
+  color: #252D3D;
 }
 
 .email tr.footer > td .footer-summary .footer-social td {
@@ -84,28 +85,28 @@
 }
 
 .email tr.footer > td .footer-summary .footer-social img[alt="Facebook"] {
-  width: 30px;
-  height: 29.5px;
+  width: 20px;
+  height: 20px;
 }
 
 .email tr.footer > td .footer-summary .footer-social img[alt="Twitter"] {
-  width: 30px;
-  height: 30px;
+  width: 18px;
+  height: 20px;
 }
 
 .email tr.footer > td .footer-summary .footer-social img[alt="LinkedIn"] {
-  width: 28.5px;
-  height: 28px;
+  width: 18px;
+  height: 20px;
 }
 
 .email tr.footer > td .footer-summary .footer-social img[alt="Instagram"] {
-  width: 29px;
-  height: 29px;
+  width: 18px;
+  height: 20px;
 }
 
 .email tr.footer > td .footer-summary .footer-social img[alt="YouTube"] {
-  width: 35px;
-  height: 25px;
+  width: 24px;
+  height: 20px;
 }
 
 .email .wysiwyg {
@@ -221,4 +222,17 @@
 
 .email .wysiwyg .text-color {
   color: #464748;
+}
+
+.email .wysiwyg a.button {
+  display: inline-block;
+  text-align: center;
+  line-height: 1.2;
+  font-size: 0.875em;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 0.75em 1em;
+  color: #fff;
+  background-color: #0084ff;
+  text-decoration: none;
 }

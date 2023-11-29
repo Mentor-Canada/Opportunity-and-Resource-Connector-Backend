@@ -1,16 +1,20 @@
 {# @var v \Drupal\app_organization\Organization\OrganizationSubmittedEmailReceiptViewModel #}
 <div class="css-wrapper">
   {% if v.langcode == 'fr' %}
-    <p>Bonjour {{ v.firstName }},</p>
-    <p>Merci d’avoir soumis « {{ v.organizationName }} » dans le Connecteur Mentor.</p>
-    <p>La demande est en cours d’examen.</p>
-    <p>Nous ferons un suivi avec vous sous peu. Si vous n'avez pas eu de nos nouvelles dans les 10 jours ouvrables, veuillez contacter <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a></p>
-    <p>Merci de soutenir le mentorat dans votre collectivité.</p>
+    <p>Cher {{ v.firstName }},</p>
+    <p>Merci d'avoir soumis l'organisation « {{ v.organizationName }} » au Connecteur Mentor.</p>
+    <p>Votre demande est actuellement en cours d'examen.</p>
+    <p>Nous vous contacterons sous peu par courriel. Si vous n'avez pas reçu de réponse de notre part dans les 7 jours ouvrables, veuillez contacter notre équipe de soutien à <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a>.</p>
+    <p>Merci de soutenir le mentorat dans votre communauté.</p>
+    <p>Prêt à améliorer la qualité de votre programme de mentorat ? Visitez notre Système de Mentorat de Qualité, un ensemble d'outils, de ressources et d'opportunités d'apprentissage interdépendants, permettant aux organisations, aux initiatives et aux programmes de faire progresser l'innovation et renforcer leur impact.</p>
+    <a href="https://qualitymentoring.ca/fr" class="button">Commencez avec le Système de mentorat de qualité dès aujourd'hui !</a>
   {% else %}
     <p>Dear {{ v.firstName }},</p>
-    <p>Thank you for submitting the "{{ v.organizationName }}" organization to the Mentor Connector.</p>
-    <p>The organization’s application is under review.</p>
-    <p>We will follow up with you shortly. If you have not heard from us in 10 business days, please contact us at <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a>.</p>
+    <p>Thank you for submitting the organization “{{ v.organizationName }}” to Mentor Connector.</p>
+    <p>Your organization's application is currently under review.</p>
+    <p>We will follow up with you shortly by email. If you have not heard back from us within 10 business days, please contact our Support Team at <a href="mailto:support@mentoringcanada.ca">support@mentoringcanada.ca</a>.</p>
     <p>Thank you for supporting mentoring in your community.</p>
+    <p>Ready to advance the quality of your mentoring program? Visit our Quality Mentoring System, a set of interrelated tools, resources, and learning opportunities, empowering organizations, initiatives, and programs to advance innovation and bolster their impact.</p>
+    <a href="https://qualitymentoring.ca/en" class="button">Get started with the Quality Mentoring System today!</a>
   {% endif %}
 </div>
