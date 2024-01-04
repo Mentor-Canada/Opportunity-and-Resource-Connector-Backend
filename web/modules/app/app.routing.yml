@@ -201,3 +201,10 @@ app.bootstrap:
     _controller: \Drupal\app\Controller\BootstrapController::get
   requirements:
     _access: 'TRUE'
+
+app.catalogue:
+  path: /a/app/catalogue
+  defaults:
+    _controller: \Drupal\app\Controller\CatalogueController::get
+  requirements:
+    _custom_access: \Drupal\app_contacts\ContactsCollectionController::checkTokenValidity
