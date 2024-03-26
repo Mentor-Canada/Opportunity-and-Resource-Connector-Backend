@@ -3,6 +3,7 @@
 namespace Drupal\app_program;
 
 use Drupal\app\GroupControllerBase;
+use Drupal\app\ServicesRequest;
 use Drupal\app\Utils\GooglePlaceUtils;
 use Drupal\app\Utils\Security;
 use Drupal\app\Utils\Utils;
@@ -134,6 +135,13 @@ class ProgramController extends GroupControllerBase
             $id = $node->id();
             $node->delete();
             \Drupal::database()->query("DELETE FROM programs WHERE entity_id = $id")->execute();
+            if (isset($_ENV['SERVICES_API_URL'])) {
+                try {
+                    ServicesRequest::request("/system/programs/connector/{$uuid}", "DELETE");
+                } catch(Exception $e) {
+                    // TODO
+                }
+            }
         }
         return new JsonResponse();
     }

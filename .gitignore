@@ -47,3 +47,4 @@ config/sync/language
 .editorconfig
 assets/
 language/
+web/info.php
